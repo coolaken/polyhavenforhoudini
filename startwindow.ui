@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>StartWindowClass</class>
+ <widget class="QWidget" name="StartWindowClass">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1540</width>
+    <height>1001</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>10</horstretch>
+    <verstretch>10</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1080</width>
+    <height>720</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Poly Haven</string>
+  </property>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>40</y>
+     <width>1061</width>
+     <height>825</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,4,1">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <layout class="QVBoxLayout" name="controlLayout">
+      <item>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>控制面板</string>
+        </property>
+        <widget class="QLabel" name="m_pathLabel">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>30</y>
+           <width>141</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>m_pathLabel</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pathBtn">
+         <property name="geometry">
+          <rect>
+           <x>146</x>
+           <y>30</y>
+           <width>21</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>📁</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="fetchComboBtn">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>60</y>
+           <width>151</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="currentText">
+          <string>all</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>all</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>hdris</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>textures</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>models</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QPushButton" name="m_cancelBtn">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>90</y>
+           <width>151</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>cancel download</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>搜索</string>
+        </property>
+        <widget class="QLineEdit" name="m_searchInput">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>30</y>
+           <width>170</width>
+           <height>30</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>170</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>170</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>350</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>500</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>分类</string>
+        </property>
+        <widget class="QTreeView" name="m_categoriesTreeView">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>20</y>
+           <width>171</width>
+           <height>316</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="m_progressBar">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="sceanLayout">
+      <item>
+       <widget class="QListView" name="m_assetListView">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="dragEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="spacing">
+         <number>15</number>
+        </property>
+        <property name="viewMode">
+         <enum>QListView::IconMode</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="propertyLayout">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>属性</string>
+        </property>
+        <widget class="QWidget" name="formLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>20</y>
+           <width>171</width>
+           <height>81</height>
+          </rect>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_1">
+            <property name="text">
+             <string>名称:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>源:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>描述:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>作者:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_6">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>预览</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_5">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>200</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>标签</string>
+        </property>
+        <widget class="QListView" name="m_tagListView">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>20</y>
+           <width>171</width>
+           <height>301</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="importBtn">
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>导入灯光</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="testBtn">
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pathBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>StartWindowClass</receiver>
+   <slot>showDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>460</x>
+     <y>92</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>240</x>
+     <y>817</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>importBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>StartWindowClass</receiver>
+   <slot>importLight()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1357</x>
+     <y>785</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1117</x>
+     <y>817</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fetchComboBtn</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>StartWindowClass</receiver>
+   <slot>showConfirmation(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>396</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>654</x>
+     <y>930</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_categoriesTreeView</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>StartWindowClass</receiver>
+   <slot>onCategoryClicked(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>340</x>
+     <y>554</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>192</x>
+     <y>566</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_searchInput</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>StartWindowClass</receiver>
+   <slot>updateText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>393</x>
+     <y>290</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>176</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_cancelBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>StartWindowClass</receiver>
+   <slot>canceldownload()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>400</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>113</x>
+     <y>141</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>testBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>StartWindowClass</receiver>
+   <slot>test()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1241</x>
+     <y>824</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1439</x>
+     <y>901</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showDialog()</slot>
+  <slot>showConfirmation(QString)</slot>
+  <slot>importLight()</slot>
+  <slot>onCategoryClicked(QModelIndex)</slot>
+  <slot>updateText(QString)</slot>
+  <slot>canceldownload()</slot>
+  <slot>test()</slot>
+ </slots>
+</ui>
