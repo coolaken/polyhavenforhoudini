@@ -1,4 +1,4 @@
-#ifndef ASSETDELEGATE_H
+ï»¿#ifndef ASSETDELEGATE_H
 #define ASSETDELEGATE_H
 
 #include <QtWidgets/QStyledItemDelegate>
@@ -14,7 +14,7 @@
 #include <QtCore/qcache.h>
 #include <QtCore/qmutex.h>
 
-// ×Ô¶¨Òå½ÇÉ«£º´æ´¢Ä¿Â¼ÍêÕûÂ·¾¶£¨Óë Python ÖĞµÄ CATALOG_PATH_ROLE ¶ÔÓ¦£©
+// è‡ªå®šä¹‰è§’è‰²ï¼šå­˜å‚¨ç›®å½•å®Œæ•´è·¯å¾„ï¼ˆä¸ Python ä¸­çš„ CATALOG_PATH_ROLE å¯¹åº”ï¼‰
 const int CATALOG_PATH_ROLE = Qt::UserRole + 100;
 
 class AssetDelegate : public QStyledItemDelegate
@@ -29,21 +29,21 @@ public:
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
     bool editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index) override;
 
-    // ¹©Íâ²¿ÉèÖÃ»º´æ£¨ÓÉÖ÷´°¿Ú´«µİ£¬¹²Ïí»º´æ£©
+    // ä¾›å¤–éƒ¨è®¾ç½®ç¼“å­˜ï¼ˆç”±ä¸»çª—å£ä¼ é€’ï¼Œå…±äº«ç¼“å­˜ï¼‰
     void setThumbCache(QCache<QString, QPixmap>* cache);
 
     void loadThumbInThread(const QString& imgPath) const;
 private:
     void startDrag(const QModelIndex& index);
-    // ĞÂÔö£ºÅĞ¶Ï WebP ÎÄ¼şÊÇ·ñÍêÕû
+    // æ–°å¢ï¼šåˆ¤æ–­ WebP æ–‡ä»¶æ˜¯å¦å®Œæ•´
     bool isWebpComplete(const QString& imgPath) const;
 
 private:
-    QSize m_cardSize;                  // ¿¨Æ¬¹Ì¶¨³ß´ç
-    QPoint m_dragStartPos;             // ÍÏ¶¯ÆğÊ¼Î»ÖÃ
-    QVariantMap m_draggedAsset;        // ÍÏ¶¯µÄ×Ê²úÊı¾İ
-    QCache<QString, QPixmap>* m_thumbCache = nullptr; // ËõÂÔÍ¼»º´æ£¨Íâ²¿´«Èë£¬¹²Ïí£©
-    mutable QPointer<QThread> m_loadThread = nullptr; // ÁÙÊ±¼ÓÔØÏß³Ì£¨mutable ÔÊĞí const º¯ÊıÖĞĞŞ¸Ä£©
+    QSize m_cardSize;                  // å¡ç‰‡å›ºå®šå°ºå¯¸
+    QPoint m_dragStartPos;             // æ‹–åŠ¨èµ·å§‹ä½ç½®
+    QVariantMap m_draggedAsset;        // æ‹–åŠ¨çš„èµ„äº§æ•°æ®
+    QCache<QString, QPixmap>* m_thumbCache = nullptr; // ç¼©ç•¥å›¾ç¼“å­˜ï¼ˆå¤–éƒ¨ä¼ å…¥ï¼Œå…±äº«ï¼‰
+    mutable QPointer<QThread> m_loadThread = nullptr; // ä¸´æ—¶åŠ è½½çº¿ç¨‹ï¼ˆmutable å…è®¸ const å‡½æ•°ä¸­ä¿®æ”¹ï¼‰
     mutable QMutex m_cacheMutex;
 };
 

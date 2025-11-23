@@ -1,4 +1,4 @@
-#ifndef GET_ASSET_LIB_H
+ï»¿#ifndef GET_ASSET_LIB_H
 #define GET_ASSET_LIB_H
 
 
@@ -13,34 +13,34 @@
 
 //#include "AssetInfo.h"
 
-// ×Ê²úÏêÇé½á¹¹Ìå£¨Ìæ´ú Python ×Öµä£¬ÀàĞÍ¸ü°²È«£©
+// èµ„äº§è¯¦æƒ…ç»“æ„ä½“ï¼ˆæ›¿ä»£ Python å­—å…¸ï¼Œç±»å‹æ›´å®‰å…¨ï¼‰
 
 
 /**
- * »ñÈ¡ Poly Haven ×Ê²ú¿âÂ·¾¶£¨´Ó polyhaven_config.json ¶ÁÈ¡£©
- * ¶ÔÓ¦ Python: get_asset_lib_path()
- * @return ×Ê²ú¿â¾ø¶ÔÂ·¾¶£¨¿Õ×Ö·û´®±íÊ¾Ê§°Ü£©
+ * è·å– Poly Haven èµ„äº§åº“è·¯å¾„ï¼ˆä» polyhaven_config.json è¯»å–ï¼‰
+ * å¯¹åº” Python: get_asset_lib_path()
+ * @return èµ„äº§åº“ç»å¯¹è·¯å¾„ï¼ˆç©ºå­—ç¬¦ä¸²è¡¨ç¤ºå¤±è´¥ï¼‰
  */
 QString get_asset_lib_path();
 
 /**
- * »ñÈ¡×Ê²úÁĞ±í»º´æÎÄ¼şÂ·¾¶£¨asset_list_cache.json£©
- * ¶ÔÓ¦ Python: asset_list_cache_path()
- * @return »º´æÎÄ¼ş¾ø¶ÔÂ·¾¶£¨¿Õ×Ö·û´®±íÊ¾Ê§°Ü£©
+ * è·å–èµ„äº§åˆ—è¡¨ç¼“å­˜æ–‡ä»¶è·¯å¾„ï¼ˆasset_list_cache.jsonï¼‰
+ * å¯¹åº” Python: asset_list_cache_path()
+ * @return ç¼“å­˜æ–‡ä»¶ç»å¯¹è·¯å¾„ï¼ˆç©ºå­—ç¬¦ä¸²è¡¨ç¤ºå¤±è´¥ï¼‰
  */
 QString asset_list_cache_path();
 
 /**
- * ¶ÁÈ¡×Ê²ú¿â»º´æÊı¾İ£¨´Ó asset_list_cache.json ½âÎö£©
- * ¶ÔÓ¦ Python: get_asset_lib()
- * @return ×Ê²ú¿â JSON Êı¾İ£¨¿Õ¶ÔÏó±íÊ¾Ê§°Ü£©
+ * è¯»å–èµ„äº§åº“ç¼“å­˜æ•°æ®ï¼ˆä» asset_list_cache.json è§£æï¼‰
+ * å¯¹åº” Python: get_asset_lib()
+ * @return èµ„äº§åº“ JSON æ•°æ®ï¼ˆç©ºå¯¹è±¡è¡¨ç¤ºå¤±è´¥ï¼‰
  */
 QMap<QString, QJsonObject> get_asset_lib();
 
 /**
- * »ñÈ¡ Blender ×Ê²ú·ÖÀàÎÄ¼şÂ·¾¶£¨blender_assets.cats.txt£©
- * ¶ÔÓ¦ Python: get_blender_assets_cats()
- * @return ·ÖÀàÎÄ¼ş¾ø¶ÔÂ·¾¶£¨¿Õ×Ö·û´®±íÊ¾Ê§°Ü£©
+ * è·å– Blender èµ„äº§åˆ†ç±»æ–‡ä»¶è·¯å¾„ï¼ˆblender_assets.cats.txtï¼‰
+ * å¯¹åº” Python: get_blender_assets_cats()
+ * @return åˆ†ç±»æ–‡ä»¶ç»å¯¹è·¯å¾„ï¼ˆç©ºå­—ç¬¦ä¸²è¡¨ç¤ºå¤±è´¥ï¼‰
  */
 QString get_blender_assets_cats();
 

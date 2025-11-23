@@ -1,31 +1,31 @@
-#include "filehash.h"
+ï»¿#include "filehash.h"
 #include <QtCore/QFile>
 #include <QtCore/QCryptographicHash>
 #include <QtCore/QDebug>
 
-// ·Ö¿é´óĞ¡£ºÓë Python Ò»ÖÂ£¨8192 ×Ö½Ú£©£¬Æ½ºâĞÔÄÜºÍÄÚ´æÕ¼ÓÃ
+// åˆ†å—å¤§å°ï¼šä¸ Python ä¸€è‡´ï¼ˆ8192 å­—èŠ‚ï¼‰ï¼Œå¹³è¡¡æ€§èƒ½å’Œå†…å­˜å ç”¨
 static const qint64 CHUNK_SIZE = 8192;
 
 QString filehash(const QString& filePath) {
-    // ´ò¿ªÎÄ¼ş£¨Ö»¶Á + ¶ş½øÖÆÄ£Ê½£¬Óë Python µÄ "rb" Ò»ÖÂ£©
+    // æ‰“å¼€æ–‡ä»¶ï¼ˆåªè¯» + äºŒè¿›åˆ¶æ¨¡å¼ï¼Œä¸ Python çš„ "rb" ä¸€è‡´ï¼‰
     QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {  // Unbuffered ¼õÉÙ¶îÍâÄÚ´æ¿ªÏú
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {  // Unbuffered å‡å°‘é¢å¤–å†…å­˜å¼€é”€
         qWarning() << "[filehash] Failed to open file for reading:" << filePath
             << "Error:" << file.errorString();
         return "";
     }
 
-    // ³õÊ¼»¯ MD5 ¹şÏ£¼ÆËãÆ÷£¨Qt Ô­ÉúÖ§³Ö£¬Óë Python hashlib.md5 Ò»ÖÂ£©
+    // åˆå§‹åŒ– MD5 å“ˆå¸Œè®¡ç®—å™¨ï¼ˆQt åŸç”Ÿæ”¯æŒï¼Œä¸ Python hashlib.md5 ä¸€è‡´ï¼‰
     QCryptographicHash hash(QCryptographicHash::Md5);
-    hash.reset();  // È·±£³õÊ¼×´Ì¬¸É¾»
+    hash.reset();  // ç¡®ä¿åˆå§‹çŠ¶æ€å¹²å‡€
 
-    // ·Ö¿é¶ÁÈ¡ÎÄ¼ş²¢¸üĞÂ¹şÏ££¨ÄÚ´æ¸ßĞ§£©
+    // åˆ†å—è¯»å–æ–‡ä»¶å¹¶æ›´æ–°å“ˆå¸Œï¼ˆå†…å­˜é«˜æ•ˆï¼‰
     QByteArray chunk;
     while (!(chunk = file.read(CHUNK_SIZE)).isEmpty()) {
-        hash.addData(chunk);  // Ã¿´ÎÌí¼Ó 8192 ×Ö½ÚµÄ¿é
+        hash.addData(chunk);  // æ¯æ¬¡æ·»åŠ  8192 å­—èŠ‚çš„å—
     }
 
-    // ¼ì²é¶ÁÈ¡¹ı³ÌÖĞÊÇ·ñ³ö´í
+    // æ£€æŸ¥è¯»å–è¿‡ç¨‹ä¸­æ˜¯å¦å‡ºé”™
     if (file.error() != QFile::NoError) {
         qWarning() << "[filehash] Error reading file:" << filePath
             << "Error:" << file.errorString();
@@ -33,9 +33,9 @@ QString filehash(const QString& filePath) {
         return "";
     }
 
-    // ¹Ø±ÕÎÄ¼ş
+    // å…³é—­æ–‡ä»¶
     file.close();
 
-    // Éú³É¹şÏ£×Ö·û´®£¨Ğ¡Ğ´£¬Óë Python µÄ hexdigest() Ò»ÖÂ£©
+    // ç”Ÿæˆå“ˆå¸Œå­—ç¬¦ä¸²ï¼ˆå°å†™ï¼Œä¸ Python çš„ hexdigest() ä¸€è‡´ï¼‰
     return hash.result().toHex().toLower();
 }

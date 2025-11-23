@@ -1,4 +1,4 @@
-#ifndef ASSETMODEL_H
+ï»¿#ifndef ASSETMODEL_H
 #define ASSETMODEL_H
 
 #include "get_asset_lib.h"
@@ -22,39 +22,39 @@ class AssetModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    // ×Ô¶¨ÒåÊı¾İ½ÇÉ«£¨Ìæ´úÄ§·¨Öµ£¬ÔöÇ¿¿É¶ÁĞÔ£©
+    // è‡ªå®šä¹‰æ•°æ®è§’è‰²ï¼ˆæ›¿ä»£é­”æ³•å€¼ï¼Œå¢å¼ºå¯è¯»æ€§ï¼‰
     enum AssetRoles {
-        AssetDataRole = Qt::UserRole + 1,  // ·µ»ØÍêÕû×Ê²úÊı¾İ£¨QVariantMap£©
-        ThumbnailRole = Qt::UserRole + 2   // ·µ»ØËõÂÔÍ¼Í¼±ê£¨QIcon£©
+        AssetDataRole = Qt::UserRole + 1,  // è¿”å›å®Œæ•´èµ„äº§æ•°æ®ï¼ˆQVariantMapï¼‰
+        ThumbnailRole = Qt::UserRole + 2   // è¿”å›ç¼©ç•¥å›¾å›¾æ ‡ï¼ˆQIconï¼‰
     };
 
-    // ¹¹Ôìº¯Êı£º½ÓÊÕ×Ê²ú×Öµä£¨key: ×Ê²úID£¬value: ×Ê²úÏêÇé£©
+    // æ„é€ å‡½æ•°ï¼šæ¥æ”¶èµ„äº§å­—å…¸ï¼ˆkey: èµ„äº§IDï¼Œvalue: èµ„äº§è¯¦æƒ…ï¼‰
     explicit AssetModel(const QMap<QString, QJsonObject>& assets = QMap<QString, QJsonObject>(),
         QObject* parent = nullptr);
 
-    // QAbstractListModel ´¿Ğéº¯ÊıÖØĞ´£¨±ØĞëÊµÏÖ£©
+    // QAbstractListModel çº¯è™šå‡½æ•°é‡å†™ï¼ˆå¿…é¡»å®ç°ï¼‰
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-    // ¿ÉÑ¡µ«ÍÆ¼ö£º¶¨Òå½ÇÉ«Ãû³Æ£¨Ö§³ÖQML/QtÔª¶ÔÏóÏµÍ³£©
+    // å¯é€‰ä½†æ¨èï¼šå®šä¹‰è§’è‰²åç§°ï¼ˆæ”¯æŒQML/Qtå…ƒå¯¹è±¡ç³»ç»Ÿï¼‰
     QHash<int, QByteArray> roleNames() const override;
 
-    // ¹«¹²½Ó¿Ú£º¸üĞÂ×Ê²úÊı¾İ£¨Ö§³Ö¶¯Ì¬Ë¢ĞÂUI£©
+    // å…¬å…±æ¥å£ï¼šæ›´æ–°èµ„äº§æ•°æ®ï¼ˆæ”¯æŒåŠ¨æ€åˆ·æ–°UIï¼‰
     void updateAssets(const QMap<QString, QJsonObject>& newAssets);
 
 private:
-    // ×Ê²ú´æ´¢½á¹¹£¨ÊÊÅäÁĞ±íË÷Òı·ÃÎÊ£©
+    // èµ„äº§å­˜å‚¨ç»“æ„ï¼ˆé€‚é…åˆ—è¡¨ç´¢å¼•è®¿é—®ï¼‰
     struct AssetItem {
-        QString assetId;       // ×Ê²úID£¨Èç"ArmChair_01"£©
-        QJsonObject details;  // ×Ê²úÏêÇé
+        QString assetId;       // èµ„äº§IDï¼ˆå¦‚"ArmChair_01"ï¼‰
+        QJsonObject details;  // èµ„äº§è¯¦æƒ…
     };
 
-    QVector<AssetItem> m_assets;  // ´æ´¢×Ê²úÁĞ±í£¨QVector±ÈQList¸üÊÊºÏÁ¬Ğø·ÃÎÊ£©
+    QVector<AssetItem> m_assets;  // å­˜å‚¨èµ„äº§åˆ—è¡¨ï¼ˆQVectoræ¯”QListæ›´é€‚åˆè¿ç»­è®¿é—®ï¼‰
 
-    // ¸¨Öúº¯Êı£º½«QMap×ª»»ÎªQVector£¨ÊÊÅäÁĞ±íÄ£ĞÍ£©
+    // è¾…åŠ©å‡½æ•°ï¼šå°†QMapè½¬æ¢ä¸ºQVectorï¼ˆé€‚é…åˆ—è¡¨æ¨¡å‹ï¼‰
     QVector<AssetItem> convertMapToList(const QMap<QString, QJsonObject>& assets) const;
 
-    // ¸¨Öúº¯Êı£º»ñÈ¡±¾µØËõÂÔÍ¼Â·¾¶
+    // è¾…åŠ©å‡½æ•°ï¼šè·å–æœ¬åœ°ç¼©ç•¥å›¾è·¯å¾„
     QString getLocalThumbnailPath(const QString& assetId) const;
 };
 

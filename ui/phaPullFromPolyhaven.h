@@ -1,4 +1,4 @@
-#ifndef PHAPULLFROMPOLYHAVEN_H
+ï»¿#ifndef PHAPULLFROMPOLYHAVEN_H
 #define PHAPULLFROMPOLYHAVEN_H
 
 #include <QtCore/QObject>
@@ -18,29 +18,29 @@
 #include <QtCore/QJsonArray>
 #include <QtWidgets/QProgressDialog>
 
-// ÏîÄ¿Ïà¹ØÍ·ÎÄ¼ş
+// é¡¹ç›®ç›¸å…³å¤´æ–‡ä»¶
 #include "get_asset_list.h"
 #include "download_file.h"
 #include "AssetModel.h"
 #include "get_asset_lib.h"
 #include "constants.h"
 
-#include <atomic>          // ¡û ĞÂÔö
+#include <atomic>          // â† æ–°å¢
 
 
 
 
-// Ä£Äâ PHPlugin Àà£¨½ø¶ÈÈ¡Ïû±êÖ¾£©
+// æ¨¡æ‹Ÿ PHPlugin ç±»ï¼ˆè¿›åº¦å–æ¶ˆæ ‡å¿—ï¼‰
 class PHPlugin {
 public:
     static bool PH_PROGRESS_CANCEL;
 };
 
-// ÏÂÔØÈÎÎñ½á¹û½á¹¹Ìå
+// ä¸‹è½½ä»»åŠ¡ç»“æœç»“æ„ä½“
 struct DownloadResult {
-    QString error;         // ´íÎóĞÅÏ¢£¨¿Õ±íÊ¾³É¹¦£©
-    QString slug;          // ³É¹¦ÏÂÔØµÄ×Ê²ú slug
-    bool exists;           // dry_run Ä£Ê½ÏÂ±íÊ¾×Ê²úÊÇ·ñÒÑ´æÔÚ
+    QString error;         // é”™è¯¯ä¿¡æ¯ï¼ˆç©ºè¡¨ç¤ºæˆåŠŸï¼‰
+    QString slug;          // æˆåŠŸä¸‹è½½çš„èµ„äº§ slug
+    bool exists;           // dry_run æ¨¡å¼ä¸‹è¡¨ç¤ºèµ„äº§æ˜¯å¦å·²å­˜åœ¨
 };
 
 class phaPullFromPolyhaven : public QObject
@@ -68,8 +68,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void doExecuteAsync();
-    void handleTaskFinished(const DownloadResult& res);   // ¡û ĞÂÔö
-    void allTasksFinished();                              // ¡û ĞÂÔö
+    void handleTaskFinished(const DownloadResult& res);   // â† æ–°å¢
+    void allTasksFinished();                              // â† æ–°å¢
 
 private:
     DownloadResult updateAsset(const QMap<QString, QJsonObject>& asset, const QDir& libDirPath, bool dryRun);
@@ -86,8 +86,8 @@ private:
     QMutex m_mutex;
     QWaitCondition m_waitCond;
 
-    std::atomic<bool> m_isCancelled{ false };              // ¡û Ô­×Ó»¯
-    std::atomic<int> m_remaining{ 0 };                     // ¡û Ìæ´ú waitForDone
+    std::atomic<bool> m_isCancelled{ false };              // â† åŸå­åŒ–
+    std::atomic<int> m_remaining{ 0 };                     // â† æ›¿ä»£ waitForDone
     int m_totalToFetch = 0;
     std::atomic<int> m_currentProgress{ 0 };
     std::atomic<int> m_downloadedCount{ 0 };

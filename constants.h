@@ -1,10 +1,10 @@
-#ifndef CONSTANTS_H
+ï»¿#ifndef CONSTANTS_H
 #define CONSTANTS_H
 
 #include <QtCore/QMap>
 #include <QtCore/QString>
 
-// ¶ÔÓ¦ Python ÖĞµÄ REQ_HEADERS
+// å¯¹åº” Python ä¸­çš„ REQ_HEADERS
 static const QMap<QString, QString> REQ_HEADERS = {
     {"User-Agent", "Blender: PH Assets - GitHub"},
     {"Accept", "application/json"}
@@ -12,10 +12,10 @@ static const QMap<QString, QString> REQ_HEADERS = {
 
 static const bool early_access = false;
 
-// È«¾ÖÈÕÖ¾ºê£¨Ä£Äâ Python ´òÓ¡µ÷ÊÔĞÅÏ¢£©
+// å…¨å±€æ—¥å¿—å®ï¼ˆæ¨¡æ‹Ÿ Python æ‰“å°è°ƒè¯•ä¿¡æ¯ï¼‰
 #define LOG_DEBUG(msg) qDebug() << "[get_asset_lib] DEBUG:" << msg
 #define LOG_ERROR(msg) qWarning() << "[get_asset_lib] ERROR:" << msg
-// ÈÕÖ¾ºê£¨Ä£Äâ Python µÄ logging£©
+// æ—¥å¿—å®ï¼ˆæ¨¡æ‹Ÿ Python çš„ loggingï¼‰
 #define LOG_INFO(msg) qDebug() << "[download_file] INFO:" << msg
 #define LOG_WARN(msg) qWarning() << "[download_file] WARN:" << msg
 

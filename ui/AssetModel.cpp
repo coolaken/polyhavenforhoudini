@@ -1,27 +1,27 @@
-#include "AssetModel.h"
+ï»¿#include "AssetModel.h"
 
 
 
-// ¹¹Ôìº¯Êı
+// æ„é€ å‡½æ•°
 AssetModel::AssetModel(const QMap<QString, QJsonObject>& assets, QObject* parent)
     : QAbstractListModel(parent)
-    , m_assets(convertMapToList(assets))  // ³õÊ¼»¯×Ê²úÁĞ±í
+    , m_assets(convertMapToList(assets))  // åˆå§‹åŒ–èµ„äº§åˆ—è¡¨
 {
 }
 
-// ÖØĞ´£º·µ»ØÊı¾İ×ÜĞĞÊı£¨QListView±ØĞë£©
+// é‡å†™ï¼šè¿”å›æ•°æ®æ€»è¡Œæ•°ï¼ˆQListViewå¿…é¡»ï¼‰
 int AssetModel::rowCount(const QModelIndex& parent) const
 {
-    // ¸¸Ë÷ÒıÓĞĞ§Ê±·µ»Ø0£¨ÁĞ±íÄ£ĞÍÎŞ²ã¼¶½á¹¹£©
+    // çˆ¶ç´¢å¼•æœ‰æ•ˆæ—¶è¿”å›0ï¼ˆåˆ—è¡¨æ¨¡å‹æ— å±‚çº§ç»“æ„ï¼‰
     if (parent.isValid())
         return 0;
     return m_assets.size();
 }
 
-// ÖØĞ´£º¸ù¾İË÷ÒıºÍ½ÇÉ«·µ»ØÊı¾İ£¨ºËĞÄ·½·¨£©
+// é‡å†™ï¼šæ ¹æ®ç´¢å¼•å’Œè§’è‰²è¿”å›æ•°æ®ï¼ˆæ ¸å¿ƒæ–¹æ³•ï¼‰
 QVariant AssetModel::data(const QModelIndex& index, int role) const
 {
-    // »ù´¡Ğ£Ñé£ºË÷ÒıÎŞĞ§/ĞĞºÅÔ½½ç
+    // åŸºç¡€æ ¡éªŒï¼šç´¢å¼•æ— æ•ˆ/è¡Œå·è¶Šç•Œ
     if (!index.isValid() || index.row() < 0 || index.row() >= m_assets.size())
         return QVariant();
 
@@ -29,13 +29,13 @@ QVariant AssetModel::data(const QModelIndex& index, int role) const
     const QString& assetId = currentAsset.assetId;
     const QJsonObject& details = currentAsset.details;
 
-    // 1. Qt±ê×¼½ÇÉ«£ºDisplayRole£¨ÁĞ±íÄ¬ÈÏÏÔÊ¾ÎÄ±¾£©
+    // 1. Qtæ ‡å‡†è§’è‰²ï¼šDisplayRoleï¼ˆåˆ—è¡¨é»˜è®¤æ˜¾ç¤ºæ–‡æœ¬ï¼‰
     if (role == Qt::DisplayRole) {
-        //return QString("%1 (%2)").arg(details.name).arg(assetId);  // ÏÔÊ¾"Ãû³Æ(ID)"
+        //return QString("%1 (%2)").arg(details.name).arg(assetId);  // æ˜¾ç¤º"åç§°(ID)"
         return "";//TODO
     }
 
-    // 2. ×Ô¶¨Òå½ÇÉ«£º·µ»ØÍêÕû×Ê²úÊı¾İ£¨QVariantMap£¬ÊÊÅäUI×Ô¶¨ÒåäÖÈ¾£©
+    // 2. è‡ªå®šä¹‰è§’è‰²ï¼šè¿”å›å®Œæ•´èµ„äº§æ•°æ®ï¼ˆQVariantMapï¼Œé€‚é…UIè‡ªå®šä¹‰æ¸²æŸ“ï¼‰
     else if (role == AssetDataRole) {
         QVariantMap assetData;
         assetData["asset_id"] = assetId;
@@ -48,15 +48,15 @@ QVariant AssetModel::data(const QModelIndex& index, int role) const
         return assetData;
     }
 
-    // 3. ×Ô¶¨Òå½ÇÉ«£º·µ»ØËõÂÔÍ¼Í¼±ê£¨Ö±½Ó·µ»ØQIcon£¬UI¿ÉÖ±½ÓÊ¹ÓÃ£©
+    // 3. è‡ªå®šä¹‰è§’è‰²ï¼šè¿”å›ç¼©ç•¥å›¾å›¾æ ‡ï¼ˆç›´æ¥è¿”å›QIconï¼ŒUIå¯ç›´æ¥ä½¿ç”¨ï¼‰
     else if (role == ThumbnailRole) {
         const QString thumbnailPath = getLocalThumbnailPath(assetId);
-        // ÈôÍ¼Æ¬²»´æÔÚ£¬·µ»ØÏµÍ³Ä¬ÈÏ"Í¼Æ¬È±Ê§"Í¼±ê
+        // è‹¥å›¾ç‰‡ä¸å­˜åœ¨ï¼Œè¿”å›ç³»ç»Ÿé»˜è®¤"å›¾ç‰‡ç¼ºå¤±"å›¾æ ‡
         if (QFile::exists(thumbnailPath)) {
             return QIcon(thumbnailPath);
         }
         else {
-            // ÊÊÅäQtÄÚÖÃÍ¼±êÖ÷Ìâ£¨¿çÆ½Ì¨¼æÈİ£©
+            // é€‚é…Qtå†…ç½®å›¾æ ‡ä¸»é¢˜ï¼ˆè·¨å¹³å°å…¼å®¹ï¼‰
             return QIcon::fromTheme("image-missing", QIcon(":/icons/default_thumbnail.png"));
         }
     }
@@ -64,53 +64,53 @@ QVariant AssetModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-// ÖØĞ´£º¶¨Òå½ÇÉ«Ãû³ÆÓ³Éä£¨Ö§³ÖQMLºÍÔª¶ÔÏóÏµÍ³£©
+// é‡å†™ï¼šå®šä¹‰è§’è‰²åç§°æ˜ å°„ï¼ˆæ”¯æŒQMLå’Œå…ƒå¯¹è±¡ç³»ç»Ÿï¼‰
 QHash<int, QByteArray> AssetModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[Qt::DisplayRole] = "display";          // ±ê×¼½ÇÉ«Ãû³Æ
-    roles[AssetDataRole] = "assetData";          // ÍêÕû×Ê²úÊı¾İ
-    roles[ThumbnailRole] = "thumbnailIcon";      // ËõÂÔÍ¼Í¼±ê
+    roles[Qt::DisplayRole] = "display";          // æ ‡å‡†è§’è‰²åç§°
+    roles[AssetDataRole] = "assetData";          // å®Œæ•´èµ„äº§æ•°æ®
+    roles[ThumbnailRole] = "thumbnailIcon";      // ç¼©ç•¥å›¾å›¾æ ‡
     return roles;
 }
 
-// ¹«¹²½Ó¿Ú£º¸üĞÂ×Ê²úÊı¾İ£¨»á´¥·¢UIË¢ĞÂ£©
+// å…¬å…±æ¥å£ï¼šæ›´æ–°èµ„äº§æ•°æ®ï¼ˆä¼šè§¦å‘UIåˆ·æ–°ï¼‰
 void AssetModel::updateAssets(const QMap<QString, QJsonObject>& newAssets)
 {
-    beginResetModel();  // QtÄ£ĞÍ±ê×¼ÓÃ·¨£º¿ªÊ¼ÖØÖÃÊı¾İ£¨Í¨ÖªUI×¼±¸¸üĞÂ£©
-    m_assets = convertMapToList(newAssets);       // Ìæ»»¾ÉÊı¾İ
-    endResetModel();    // ½áÊøÖØÖÃ£¨Í¨ÖªUIË¢ĞÂ£©
+    beginResetModel();  // Qtæ¨¡å‹æ ‡å‡†ç”¨æ³•ï¼šå¼€å§‹é‡ç½®æ•°æ®ï¼ˆé€šçŸ¥UIå‡†å¤‡æ›´æ–°ï¼‰
+    m_assets = convertMapToList(newAssets);       // æ›¿æ¢æ—§æ•°æ®
+    endResetModel();    // ç»“æŸé‡ç½®ï¼ˆé€šçŸ¥UIåˆ·æ–°ï¼‰
 }
 
-// ¸¨Öúº¯Êı£º½«QMap×ª»»ÎªQVector£¨ÊÊÅäÁĞ±íË÷Òı·ÃÎÊ£©
+// è¾…åŠ©å‡½æ•°ï¼šå°†QMapè½¬æ¢ä¸ºQVectorï¼ˆé€‚é…åˆ—è¡¨ç´¢å¼•è®¿é—®ï¼‰
 QVector<AssetModel::AssetItem> AssetModel::convertMapToList(const QMap<QString, QJsonObject>& assets) const
 {
     QVector<AssetItem> assetList;
-    assetList.reserve(assets.size());  // Ô¤·ÖÅäÄÚ´æ£¬ÌáÉıĞÔÄÜ
+    assetList.reserve(assets.size());  // é¢„åˆ†é…å†…å­˜ï¼Œæå‡æ€§èƒ½
 
-    // ±éÀúQMap£¬×ª»»ÎªÁĞ±í½á¹¹
+    // éå†QMapï¼Œè½¬æ¢ä¸ºåˆ—è¡¨ç»“æ„
     for (auto it = assets.constBegin(); it != assets.constEnd(); ++it) {
         AssetItem item;
-        item.assetId = it.key();       // ×Ê²úID£¨QMapµÄkey£©
-        item.details = it.value();     // ×Ê²úÏêÇé£¨QMapµÄvalue£©
+        item.assetId = it.key();       // èµ„äº§IDï¼ˆQMapçš„keyï¼‰
+        item.details = it.value();     // èµ„äº§è¯¦æƒ…ï¼ˆQMapçš„valueï¼‰
         assetList.append(item);
     }
 
     return assetList;
 }
 
-// ¸¨Öúº¯Êı£º»ñÈ¡±¾µØËõÂÔÍ¼Â·¾¶£¨.webp¸ñÊ½£©
+// è¾…åŠ©å‡½æ•°ï¼šè·å–æœ¬åœ°ç¼©ç•¥å›¾è·¯å¾„ï¼ˆ.webpæ ¼å¼ï¼‰
 QString AssetModel::getLocalThumbnailPath(const QString& assetId) const
 {
-    // ¹¹½¨Â·¾¶£º×Ê²ú¿â¸ùÂ·¾¶ / ×Ê²úID / thumbnail.webp
+    // æ„å»ºè·¯å¾„ï¼šèµ„äº§åº“æ ¹è·¯å¾„ / èµ„äº§ID / thumbnail.webp
     const QString thumbnailFolder = QString("%1/%2").arg(get_asset_lib_path()).arg(assetId);
     const QString thumbnailPath = QString("%1/thumbnail.webp").arg(thumbnailFolder);
 
-    // È·±£ÎÄ¼ş¼Ğ´æÔÚ£¨²»´æÔÚÔò´´½¨£©
+    // ç¡®ä¿æ–‡ä»¶å¤¹å­˜åœ¨ï¼ˆä¸å­˜åœ¨åˆ™åˆ›å»ºï¼‰
     QDir dir(thumbnailFolder);
     if (!dir.exists()) {
-        dir.mkpath(".");  // ´´½¨¶à¼¶Ä¿Â¼£¨°üÀ¨¸¸Ä¿Â¼£©
-        qDebug() << "[AssetModel] ´´½¨ËõÂÔÍ¼ÎÄ¼ş¼Ğ£º" << thumbnailFolder;
+        dir.mkpath(".");  // åˆ›å»ºå¤šçº§ç›®å½•ï¼ˆåŒ…æ‹¬çˆ¶ç›®å½•ï¼‰
+        qDebug() << "[AssetModel] åˆ›å»ºç¼©ç•¥å›¾æ–‡ä»¶å¤¹ï¼š" << thumbnailFolder;
     }
 
     return thumbnailPath;

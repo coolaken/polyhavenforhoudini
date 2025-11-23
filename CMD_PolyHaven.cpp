@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <UT/UT_DSOVersion.h>
 #include <CMD/CMD_Manager.h>
 #include <CMD/CMD_Args.h>

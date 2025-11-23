@@ -1,4 +1,4 @@
-#include "get_asset_lib.h"
+ï»¿#include "get_asset_lib.h"
 #include <QtCore/qfile.h>
 #include <QtCore/qjsondocument.h>
 #include <QtCore/QJsonParseError>
@@ -33,7 +33,7 @@ static QList<int> jsonIntArrayToList(const QJsonArray& arr)
     return list;
 }
 
-// ÊµÏÖÈ«¾Öº¯Êı£º»ñÈ¡×Ê²ú¿â¸ùÂ·¾¶£¨Ğè¸ù¾İÊµ¼ÊÏîÄ¿ĞŞ¸ÄÂß¼­£©
+// å®ç°å…¨å±€å‡½æ•°ï¼šè·å–èµ„äº§åº“æ ¹è·¯å¾„ï¼ˆéœ€æ ¹æ®å®é™…é¡¹ç›®ä¿®æ”¹é€»è¾‘ï¼‰
 QString get_asset_lib_path()
 {
     return StartWindow::s_lastPath;
@@ -42,7 +42,7 @@ QString get_asset_lib_path()
 
 
 // -----------------------------------------------------------------------------
-// ¶ÔÓ¦ Python: asset_list_cache_path()
+// å¯¹åº” Python: asset_list_cache_path()
 // -----------------------------------------------------------------------------
 QString asset_list_cache_path() {
     QString assetLibPath = get_asset_lib_path();
@@ -51,18 +51,18 @@ QString asset_list_cache_path() {
         return "";
     }
 
-    // ¹¹½¨ asset_list_cache.json Â·¾¶
+    // æ„å»º asset_list_cache.json è·¯å¾„
     QString cachePath = QDir(assetLibPath).filePath("asset_list_cache.json");
-    // Ä£Äâ Path.as_posix()£¬·µ»Ø / ·Ö¸ôµÄÂ·¾¶
+    // æ¨¡æ‹Ÿ Path.as_posix()ï¼Œè¿”å› / åˆ†éš”çš„è·¯å¾„
     return QFileInfo(cachePath).absoluteFilePath().replace("\\", "/");
 }
 
 // -----------------------------------------------------------------------------
-// ¶ÔÓ¦ Python: get_asset_lib()
+// å¯¹åº” Python: get_asset_lib()
 // -----------------------------------------------------------------------------
 QMap<QString, QJsonObject> get_asset_lib()
 {
-    QString path = asset_list_cache_path();   // ÄãµÄ»º´æÎÄ¼şÂ·¾¶
+    QString path = asset_list_cache_path();   // ä½ çš„ç¼“å­˜æ–‡ä»¶è·¯å¾„
     QFile file(path);
     if (!file.exists() || !file.open(QIODevice::ReadOnly))
         return {};
@@ -92,7 +92,7 @@ QMap<QString, QJsonObject> get_asset_lib()
 
 
 // -----------------------------------------------------------------------------
-// ¶ÔÓ¦ Python: get_blender_assets_cats()
+// å¯¹åº” Python: get_blender_assets_cats()
 // -----------------------------------------------------------------------------
 QString get_blender_assets_cats() {
 
@@ -102,10 +102,10 @@ QString get_blender_assets_cats() {
         return "";
     }
 
-    // ¹¹½¨ blender_assets.cats.txt Â·¾¶£ºµ±Ç°ÎÄ¼şÏòÉÏ 4 ¼¶Ä¿Â¼
+    // æ„å»º blender_assets.cats.txt è·¯å¾„ï¼šå½“å‰æ–‡ä»¶å‘ä¸Š 4 çº§ç›®å½•
     QString catsPath = QDir(assetLibPath).filePath("blender_assets.cats.txt");
 
-    // Ä£Äâ Path.as_posix()£¬·µ»Ø / ·Ö¸ôµÄÂ·¾¶
+    // æ¨¡æ‹Ÿ Path.as_posix()ï¼Œè¿”å› / åˆ†éš”çš„è·¯å¾„
     return QFileInfo(catsPath).absoluteFilePath().replace("\\", "/");
 }
 

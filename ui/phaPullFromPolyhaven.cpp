@@ -1,10 +1,10 @@
-#include "phaPullFromPolyhaven.h"
+ï»¿#include "phaPullFromPolyhaven.h"
 #include <QtCore/QDebug>
 #include <QtCore/QCryptographicHash>
-#include <atomic>        // Ô­×Ó¼ÆÊı
+#include <atomic>        // åŸå­è®¡æ•°
 #include "AssetDownloadTask.h"
 
-// ³õÊ¼»¯ PHPlugin ¾²Ì¬±äÁ¿
+// åˆå§‹åŒ– PHPlugin é™æ€å˜é‡
 bool PHPlugin::PH_PROGRESS_CANCEL = false;
 
 phaPullFromPolyhaven::phaPullFromPolyhaven(QObject* parent)
@@ -37,7 +37,7 @@ void phaPullFromPolyhaven::setRevalidate(bool revalidate)
     m_revalidate = revalidate;
 }
 
-/* ---------- Òì²½Èë¿Ú ---------- */
+/* ---------- å¼‚æ­¥å…¥å£ ---------- */
 void phaPullFromPolyhaven::executeAsync()
 {
     m_asyncResultCode = 0;
@@ -80,14 +80,14 @@ void phaPullFromPolyhaven::executeAsync()
     QMetaObject::invokeMethod(this, "doExecuteAsync", Qt::QueuedConnection);
 }
 
-/* ---------- ×ÓÏß³ÌÕæÕı¸É»î ---------- */
+/* ---------- å­çº¿ç¨‹çœŸæ­£å¹²æ´» ---------- */
 void phaPullFromPolyhaven::doExecuteAsync()
 {
     processAssets(m_asyncAssets, m_asyncLibDir);
-    /* ÊÕÎ²ĞÅºÅÓÉ allTasksFinished() ·¢³ö£¬²»ÔÙÕâÀïÁ¢¼´µ÷ÓÃ */
+    /* æ”¶å°¾ä¿¡å·ç”± allTasksFinished() å‘å‡ºï¼Œä¸å†è¿™é‡Œç«‹å³è°ƒç”¨ */
 }
 
-/* ---------- È¡Ïû ---------- */
+/* ---------- å–æ¶ˆ ---------- */
 void phaPullFromPolyhaven::cancelDownload()
 {
     QMutexLocker locker(&m_mutex);
@@ -96,7 +96,7 @@ void phaPullFromPolyhaven::cancelDownload()
     
 }
 
-/* ---------- ´¦Àí×Ê²ú£ºÈ«¾ÖÏß³Ì³Ø + Ô­×Ó¼ÆÊı ---------- */
+/* ---------- å¤„ç†èµ„äº§ï¼šå…¨å±€çº¿ç¨‹æ±  + åŸå­è®¡æ•° ---------- */
 void phaPullFromPolyhaven::processAssets(const QMap<QString, QJsonObject>& assets,
     const QDir& libDirPath)
 {
@@ -126,10 +126,10 @@ void phaPullFromPolyhaven::processAssets(const QMap<QString, QJsonObject>& asset
         task->setAutoDelete(true);
         pool->start(task);
     }
-    /* ÎŞ waitForDone£¡º¯ÊıÁ¢¼´·µ»Ø£¬ÊÂ¼şÑ­»·¼ÌĞø */
+    /* æ—  waitForDoneï¼å‡½æ•°ç«‹å³è¿”å›ï¼Œäº‹ä»¶å¾ªç¯ç»§ç»­ */
 }
 
-/* ---------- µ¥ÈÎÎñÍê³É²Û ---------- */
+/* ---------- å•ä»»åŠ¡å®Œæˆæ§½ ---------- */
 void phaPullFromPolyhaven::handleTaskFinished(const DownloadResult& res)
 {
     if (res.error.isEmpty()) {
@@ -153,7 +153,7 @@ void phaPullFromPolyhaven::handleTaskFinished(const DownloadResult& res)
         Q_EMIT allTasksFinished();
 }
 
-/* ---------- È«²¿ÈÎÎñÍê³É²Û ---------- */
+/* ---------- å…¨éƒ¨ä»»åŠ¡å®Œæˆæ§½ ---------- */
 void phaPullFromPolyhaven::allTasksFinished()
 {
     if (m_isCancelled.load(std::memory_order_relaxed)) {
@@ -166,14 +166,14 @@ void phaPullFromPolyhaven::allTasksFinished()
     Q_EMIT finished(m_downloadedCount.load(), m_failedCount.load());
     Q_EMIT executeFinished(m_asyncResultCode);
 
-    /* Êı¾İÇå¿Õ·ÅÖ÷Ïß³Ì */
+    /* æ•°æ®æ¸…ç©ºæ”¾ä¸»çº¿ç¨‹ */
     m_asyncAssets.clear();
     m_asyncLibDir = QDir();
 }
 
 
 
-/* ÒÔÏÂËÄ¸öº¯ÊıÎ´¸Ä¶¯£¬Ô­Ñù±£Áô */
+/* ä»¥ä¸‹å››ä¸ªå‡½æ•°æœªæ”¹åŠ¨ï¼ŒåŸæ ·ä¿ç•™ */
 DownloadResult phaPullFromPolyhaven::updateAsset(const QMap<QString, QJsonObject>& asset, const QDir& libDirPath, bool dryRun)
 {
     DownloadResult result;
@@ -208,7 +208,7 @@ DownloadResult phaPullFromPolyhaven::updateAsset(const QMap<QString, QJsonObject
 
 QString phaPullFromPolyhaven::downloadAsset(const QMap<QString, QJsonObject>& asset, const QDir& libDirPath, const QFileInfo& infoFp)
 {
-    // ÄãµÄÏÂÔØÂß¼­£¨Ö®Ç°ÒÑĞŞ¸´µÄ°æ±¾£¬¾«×¼ÏÂÔØ hdri¡ú1k¡úhdr£©
+    // ä½ çš„ä¸‹è½½é€»è¾‘ï¼ˆä¹‹å‰å·²ä¿®å¤çš„ç‰ˆæœ¬ï¼Œç²¾å‡†ä¸‹è½½ hdriâ†’1kâ†’hdrï¼‰
     QDir assetDir(libDirPath.filePath(asset.firstKey()));//assetDir E:\Resource\Poly Haven\billiard_hall
     if (!assetDir.exists() && !assetDir.mkpath(".")) {
         return QString("Failed to create asset directory: %1").arg(assetDir.path());
@@ -238,21 +238,21 @@ QString phaPullFromPolyhaven::downloadAsset(const QMap<QString, QJsonObject>& as
     }
     else
     {
-        // ²½Öè2£º´ò¿ªÎÄ¼ş£¨Ö»¶ÁÄ£Ê½ + ÎÄ±¾Ä£Ê½£¬±ÜÃâ¶ş½øÖÆ½âÎöÎÊÌâ£©
+        // æ­¥éª¤2ï¼šæ‰“å¼€æ–‡ä»¶ï¼ˆåªè¯»æ¨¡å¼ + æ–‡æœ¬æ¨¡å¼ï¼Œé¿å…äºŒè¿›åˆ¶è§£æé—®é¢˜ï¼‰
         if (!infoFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
             
             return QString("Failed to open %1: %2").arg(asset.firstKey()).arg(infoFile.errorString());
         }
 
-        // ²½Öè3£º¶ÁÈ¡ÎÄ¼şÄÚÈİ£¨È«²¿¶ÁÈ¡Îª×Ö·û´®£©
+        // æ­¥éª¤3ï¼šè¯»å–æ–‡ä»¶å†…å®¹ï¼ˆå…¨éƒ¨è¯»å–ä¸ºå­—ç¬¦ä¸²ï¼‰
         QString jsonStr = infoFile.readAll();
-        infoFile.close(); // ¶ÁÈ¡Íê³ÉºóÁ¢¼´¹Ø±ÕÎÄ¼ş£¨ÖØÒª£¡£©
+        infoFile.close(); // è¯»å–å®Œæˆåç«‹å³å…³é—­æ–‡ä»¶ï¼ˆé‡è¦ï¼ï¼‰
 
-        // ²½Öè4£º½âÎö JSON ×Ö·û´®
+        // æ­¥éª¤4ï¼šè§£æ JSON å­—ç¬¦ä¸²
         QJsonParseError parseError;
         QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonStr.toUtf8(), &parseError);
 
-        // ²½Öè5£º¼ì²é½âÎö½á¹û + ×ª»»Îª QJsonObject
+        // æ­¥éª¤5ï¼šæ£€æŸ¥è§£æç»“æœ + è½¬æ¢ä¸º QJsonObject
         if (parseError.error != QJsonParseError::NoError) {
 
             return QString(parseError.errorString());
@@ -262,7 +262,7 @@ QString phaPullFromPolyhaven::downloadAsset(const QMap<QString, QJsonObject>& as
             return QString("shuzu");
         }
 
-        // ³É¹¦½âÎöÎª QJsonObject
+        // æˆåŠŸè§£æä¸º QJsonObject
         infoJson = jsonDoc.object();
     }
 
@@ -291,7 +291,7 @@ QString phaPullFromPolyhaven::downloadAsset(const QMap<QString, QJsonObject>& as
 
 
 
-    //TODO ÓĞĞ©info.json²ã¼¶²»Ò»Ñù ²»ÖªµÀÎªÊ²Ã´
+    //TODO æœ‰äº›info.jsonå±‚çº§ä¸ä¸€æ · ä¸çŸ¥é“ä¸ºä»€ä¹ˆ
     if (infoJson.contains("files") && infoJson["files"].isObject()) {
         QJsonObject filesJson = infoJson["files"].toObject();
         if (!filesJson.contains("hdri") || !filesJson["hdri"].isObject()) {
@@ -393,7 +393,7 @@ QString phaPullFromPolyhaven::downloadAsset(const QMap<QString, QJsonObject>& as
 
 bool phaPullFromPolyhaven::checkAssetExists(const QMap<QString, QJsonObject>& asset, const QFileInfo& infoFp, bool& needUpdate)
 {
-    //Ã»ÓĞinfo.jsonÀïÃæÃ»ÓĞslug ËùÒÔÕâ¸öÓĞÎÊÌâÅ¶.
+    //æ²¡æœ‰info.jsoné‡Œé¢æ²¡æœ‰slug æ‰€ä»¥è¿™ä¸ªæœ‰é—®é¢˜å“¦.
     QJsonObject oldInfo = loadOldInfo(infoFp);
     oldInfo.value("files").toObject();
     if (oldInfo.isEmpty()) {

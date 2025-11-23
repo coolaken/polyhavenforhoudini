@@ -1,33 +1,33 @@
-#include "get_asset_list.h"
+ï»¿#include "get_asset_list.h"
 #include <QtCore/qdebug.h>
 
-// Íâ²¿³£Á¿ÉùÃ÷£¨ĞèÔÚ constants.h ÖĞ¶¨Òå£©
-extern const bool early_access;  // ¶ÔÓ¦ Python ÖĞµÄ early_access£¨ÊÇ·ñ°üº¬Î´À´×Ê²ú£©
+// å¤–éƒ¨å¸¸é‡å£°æ˜ï¼ˆéœ€åœ¨ constants.h ä¸­å®šä¹‰ï¼‰
+extern const bool early_access;  // å¯¹åº” Python ä¸­çš„ early_accessï¼ˆæ˜¯å¦åŒ…å«æœªæ¥èµ„äº§ï¼‰
 
 
 
 // -----------------------------------------------------------------------------
-// ºËĞÄº¯Êı£º»ñÈ¡×Ê²úÁĞ±í£¨»º´æÂß¼­²»±ä£¬½öÌæ»»ÍøÂçÇëÇó£©
+// æ ¸å¿ƒå‡½æ•°ï¼šè·å–èµ„äº§åˆ—è¡¨ï¼ˆç¼“å­˜é€»è¾‘ä¸å˜ï¼Œä»…æ›¿æ¢ç½‘ç»œè¯·æ±‚ï¼‰
 // -----------------------------------------------------------------------------
 QMap<QString, QJsonObject> get_asset_list(const QString& asset_type, bool force, QString& error)
 {
     QMap<QString, QJsonObject> assetList;
     error.clear();
 
-    // 1. ¼ì²é×Ê²ú¿âÊÇ·ñ´æÔÚ
+    // 1. æ£€æŸ¥èµ„äº§åº“æ˜¯å¦å­˜åœ¨
 
 
-    // 2. ¹¹½¨»º´æÎÄ¼şÂ·¾¶
+    // 2. æ„å»ºç¼“å­˜æ–‡ä»¶è·¯å¾„
     QString assetLibPath = get_asset_lib_path();
     QFileInfo cacheFileInfo(QDir(assetLibPath).filePath("asset_list_cache.json"));
     QFile cacheFile(cacheFileInfo.filePath());
 
-    // 3. ¼ì²é»º´æ£¨Î´Ç¿ÖÆË¢ĞÂÇÒ»º´æ´æÔÚ£©
+    // 3. æ£€æŸ¥ç¼“å­˜ï¼ˆæœªå¼ºåˆ¶åˆ·æ–°ä¸”ç¼“å­˜å­˜åœ¨ï¼‰
     if (!force && cacheFileInfo.exists()) {
         qint64 cacheAgeSec = QDateTime::currentDateTime().toSecsSinceEpoch() - cacheFileInfo.lastModified().toSecsSinceEpoch();
         double cacheAgeDays = cacheAgeSec / (60.0 * 60.0 * 24.0);
 
-        if (cacheAgeDays <= 7.0) {  // »º´æÎ´¹ıÆÚ£¨7ÌìÄÚ£©
+        if (cacheAgeDays <= 7.0) {  // ç¼“å­˜æœªè¿‡æœŸï¼ˆ7å¤©å†…ï¼‰
             if (cacheFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
                 QJsonParseError jsonError;
                 QJsonDocument jsonDoc = QJsonDocument::fromJson(cacheFile.readAll(), &jsonError);
@@ -51,7 +51,7 @@ QMap<QString, QJsonObject> get_asset_list(const QString& asset_type, bool force,
         }
     }
 
-    // 4. ´Ó API »ñÈ¡Êı¾İ
+    // 4. ä» API è·å–æ•°æ®
     QString apiUrl = QString("https://api.polyhaven.com/assets?t=%1").arg(asset_type);
     if (early_access) {
         apiUrl += "&future=true";
@@ -59,13 +59,13 @@ QMap<QString, QJsonObject> get_asset_list(const QString& asset_type, bool force,
     LOG_DEBUG(QString("Getting asset list from %1").arg(apiUrl));
     QUrl url = QString(apiUrl);
 
-    // 5. ·¢Æğ HTTPS ÇëÇó£¨WinHTTP ÊµÏÖ£©
+    // 5. å‘èµ· HTTPS è¯·æ±‚ï¼ˆWinHTTP å®ç°ï¼‰
     
     QByteArray jsonData = get(url);
     
     
 
-    // 6. ½âÎö JSON
+    // 6. è§£æ JSON
     QJsonParseError json_error;
     
     QJsonDocument json_doc = QJsonDocument::fromJson(jsonData, &json_error);
@@ -88,7 +88,7 @@ QMap<QString, QJsonObject> get_asset_list(const QString& asset_type, bool force,
     QJsonObject jsonObj = json_doc.object();
     assetList = parseAssetJson(jsonObj);
 
-    // 7. »º´æÊı¾İµ½±¾µØ
+    // 7. ç¼“å­˜æ•°æ®åˆ°æœ¬åœ°
     QDir cacheDir(cacheFileInfo.path());
     if (!cacheDir.exists()) {
         cacheDir.mkpath(".");
@@ -107,7 +107,7 @@ QMap<QString, QJsonObject> get_asset_list(const QString& asset_type, bool force,
 }
 
 // -----------------------------------------------------------------------------
-// ¸¨Öúº¯Êı£º½âÎö JSON Îª AssetInfo ÁĞ±í£¨ÎŞĞŞ¸Ä£¬ÍêÈ«¸´ÓÃ£©
+// è¾…åŠ©å‡½æ•°ï¼šè§£æ JSON ä¸º AssetInfo åˆ—è¡¨ï¼ˆæ— ä¿®æ”¹ï¼Œå®Œå…¨å¤ç”¨ï¼‰
 // -----------------------------------------------------------------------------
 QMap<QString, QJsonObject> parseAssetJson(const QJsonObject& jsonObj)
 {

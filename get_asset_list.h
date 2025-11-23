@@ -1,4 +1,4 @@
-#ifndef GET_ASSET_LIST_H
+ï»¿#ifndef GET_ASSET_LIST_H
 #define GET_ASSET_LIST_H
 
 #include "ui/phaPullFromPolyhaven.h"
@@ -22,12 +22,12 @@
 
 
 /**
- * »ñÈ¡×Ê²úÁĞ±í£¨WinHTTP ÊµÏÖ£¬ÎŞ¶îÍâÒÀÀµ£©
- * »º´æÂß¼­£º±¾µØ»º´æÎÄ¼şÓĞĞ§ÆÚ 7 Ìì£¬force=true Ç¿ÖÆË¢ĞÂ
- * @param asset_type ×Ê²úÀàĞÍ£º"all"/"hdris"/"textures"/"models"
- * @param force ÊÇ·ñÇ¿ÖÆË¢ĞÂ»º´æ
- * @param error Êä³ö²ÎÊı£º´íÎóĞÅÏ¢£¨³É¹¦ÔòÎª¿Õ£©
- * @return ×Ê²úÁĞ±í£¨key: slug£¬value: QJsonObject£©
+ * è·å–èµ„äº§åˆ—è¡¨ï¼ˆWinHTTP å®ç°ï¼Œæ— é¢å¤–ä¾èµ–ï¼‰
+ * ç¼“å­˜é€»è¾‘ï¼šæœ¬åœ°ç¼“å­˜æ–‡ä»¶æœ‰æ•ˆæœŸ 7 å¤©ï¼Œforce=true å¼ºåˆ¶åˆ·æ–°
+ * @param asset_type èµ„äº§ç±»å‹ï¼š"all"/"hdris"/"textures"/"models"
+ * @param force æ˜¯å¦å¼ºåˆ¶åˆ·æ–°ç¼“å­˜
+ * @param error è¾“å‡ºå‚æ•°ï¼šé”™è¯¯ä¿¡æ¯ï¼ˆæˆåŠŸåˆ™ä¸ºç©ºï¼‰
+ * @return èµ„äº§åˆ—è¡¨ï¼ˆkey: slugï¼Œvalue: QJsonObjectï¼‰
  */
 QMap<QString, QJsonObject> get_asset_list(const QString& asset_type = "all",
     bool force = false,

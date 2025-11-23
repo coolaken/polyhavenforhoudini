@@ -1,7 +1,7 @@
-#include "download_file.h"
+ï»¿#include "download_file.h"
 
-// --- 1. Í¨ÓÃ»Øµ÷ (ºËĞÄ¼¼ÇÉ) ---
-// ÎŞÂÛÊÇ´æÎÄ¼ş»¹ÊÇ´æÄÚ´æ£¬¶¼°Ñ stream Ç¿×ªÎª QIODevice
+// --- 1. é€šç”¨å›è°ƒ (æ ¸å¿ƒæŠ€å·§) ---
+// æ— è®ºæ˜¯å­˜æ–‡ä»¶è¿˜æ˜¯å­˜å†…å­˜ï¼Œéƒ½æŠŠ stream å¼ºè½¬ä¸º QIODevice
 static size_t write_callback(void* ptr, size_t size, size_t nmemb, void* stream) {
     QIODevice* device = static_cast<QIODevice*>(stream);
     if (device && device->isWritable()) {
@@ -10,30 +10,30 @@ static size_t write_callback(void* ptr, size_t size, size_t nmemb, void* stream)
     return 0;
 }
 
-// --- ÄÚ²¿Í¨ÓÃÅäÖÃº¯Êı (¼õÉÙÖØ¸´´úÂë) ---
+// --- å†…éƒ¨é€šç”¨é…ç½®å‡½æ•° (å‡å°‘é‡å¤ä»£ç ) ---
 void setup_curl_common(CURL* curl, const char* url, QIODevice* device) {
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, device); // ´«Èë QFile* »ò QBuffer*
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, device); // ä¼ å…¥ QFile* æˆ– QBuffer*
 
-    // ¹«¹²ÅäÖÃ
+    // å…¬å…±é…ç½®
     curl_easy_setopt(curl, CURLOPT_USERAGENT, "Houdini-Plugin/1.0");
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 }
 
-// --- 2. GET: »ñÈ¡Ğ¡Êı¾İ (JSON/ÎÄ±¾) ---
+// --- 2. GET: è·å–å°æ•°æ® (JSON/æ–‡æœ¬) ---
 QByteArray get(const QUrl& url) {
     CURL* curl = curl_easy_init();
     QByteArray data;
 
     if (curl) {
-        // Ê¹ÓÃ QBuffer ÔÚÄÚ´æÖĞ¶ÁĞ´Êı¾İ
+        // ä½¿ç”¨ QBuffer åœ¨å†…å­˜ä¸­è¯»å†™æ•°æ®
         QBuffer buffer(&data);
-        buffer.open(QIODevice::WriteOnly); // ±ØĞë´ò¿ª
+        buffer.open(QIODevice::WriteOnly); // å¿…é¡»æ‰“å¼€
 
-        // ÉúÃüÖÜÆÚ¹ÜÀí
+        // ç”Ÿå‘½å‘¨æœŸç®¡ç†
         QByteArray urlBytes = url.toEncoded();
 
         setup_curl_common(curl, urlBytes.constData(), &buffer);
@@ -50,7 +50,7 @@ QByteArray get(const QUrl& url) {
     return data;
 }
 
-// --- 3. DOWNLOAD: ÏÂÔØ´óÎÄ¼ş (Á÷Ê½Ğ´ÈëÓ²ÅÌ) ---
+// --- 3. DOWNLOAD: ä¸‹è½½å¤§æ–‡ä»¶ (æµå¼å†™å…¥ç¡¬ç›˜) ---
 bool download_file(const QUrl& url, const QString& dest) {
     CURL* curl = curl_easy_init();
     bool success = false;
@@ -69,12 +69,12 @@ bool download_file(const QUrl& url, const QString& dest) {
             curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
             if (res == CURLE_OK && http_code == 200) {
-                qInfo() << "ÏÂÔØ³É¹¦";
+                qInfo() << "ä¸‹è½½æˆåŠŸ";
             }
             else {
-                qWarning() << "ÏÂÔØÊ§°Ü£¬HTTP´úÂë:" << http_code;
+                qWarning() << "ä¸‹è½½å¤±è´¥ï¼ŒHTTPä»£ç :" << http_code;
                 file.close();
-                file.remove(); // É¾µôÕâ¸öÎŞĞ§µÄÎÄ¼ş£¬·ÀÖ¹  ±¨´í
+                file.remove(); // åˆ æ‰è¿™ä¸ªæ— æ•ˆçš„æ–‡ä»¶ï¼Œé˜²æ­¢  æŠ¥é”™
                 return false;
             }
         }

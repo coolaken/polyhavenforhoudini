@@ -1,4 +1,4 @@
-#ifndef ASSETDOWNLOADTASK_H
+ï»¿#ifndef ASSETDOWNLOADTASK_H
 #define ASSETDOWNLOADTASK_H
 
 #include <QtCore/QObject>
@@ -6,7 +6,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QJsonArray>
 #include <QtWidgets/QProgressDialog>
-#include <atomic>          // ¡û ĞÂÔö
+#include <atomic>          // â† æ–°å¢
 //#include "AssetInfo.h"
 #include "phaPullFromPolyhaven.h"
 

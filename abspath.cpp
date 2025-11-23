@@ -1,4 +1,4 @@
-#include "abspath.h"
+ï»¿#include "abspath.h"
 #include <QtCore/qdir.h>
 #include <QtCore/QJsonParseError>
 #include <QtCore/qdebug.h>
@@ -6,17 +6,17 @@
 #include <UT/UT_String.h>
 
 
-// ÈÕÖ¾ºê£¨ÊÊÅä Houdini ÈÕÖ¾ÏµÍ³£©
+// æ—¥å¿—å®ï¼ˆé€‚é… Houdini æ—¥å¿—ç³»ç»Ÿï¼‰
 #define LOG_DEBUG(msg) qDebug() << "[PolyHavenLink] DEBUG:" << msg
 #define LOG_ERROR(msg) qWarning() << "[PolyHavenLink] ERROR:" << msg
 
 
 
 // -----------------------------------------------------------------------------
-// ¶ÔÓ¦ Python: abspath(p)
+// å¯¹åº” Python: abspath(p)
 // -----------------------------------------------------------------------------
 QString abspath(const QString& p) {
-    // ´¦Àí¿ÕÂ·¾¶»ò½öº¬¿Õ¸ñµÄÇé¿ö
+    // å¤„ç†ç©ºè·¯å¾„æˆ–ä»…å«ç©ºæ ¼çš„æƒ…å†µ
     QString input = p.trimmed();
     return QFileInfo(input).absolutePath();
 }
@@ -26,22 +26,22 @@ QString abspath(const QString& p) {
 
 
 // -----------------------------------------------------------------------------
-// ¶ÔÓ¦ Python: get_package_path()
+// å¯¹åº” Python: get_package_path()
 // -----------------------------------------------------------------------------
 QString get_package_path() {
-    // Ä¬ÈÏ²å¼şÂ·¾¶£¨Óë Python Ò»ÖÂ£©
+    // é»˜è®¤æ’ä»¶è·¯å¾„ï¼ˆä¸ Python ä¸€è‡´ï¼‰
     QString default_path = "C:/Users/Rus/Documents/houdini21.0/packages/PolyHavenLink";
     if (QFileInfo::exists(default_path)) {
         return default_path;
     }
 
-    // Ä¬ÈÏÂ·¾¶²»´æÔÚÊ±£¬Í¨¹ıµ±Ç°ÎÄ¼şÂ·¾¶ÏòÉÏÍÆµ¼£¨¶ÔÓ¦ os.path.dirname Èı´Î£©
+    // é»˜è®¤è·¯å¾„ä¸å­˜åœ¨æ—¶ï¼Œé€šè¿‡å½“å‰æ–‡ä»¶è·¯å¾„å‘ä¸Šæ¨å¯¼ï¼ˆå¯¹åº” os.path.dirname ä¸‰æ¬¡ï¼‰
     try {
-        // »ñÈ¡µ±Ç° DLL/²å¼şµÄÂ·¾¶£¨Houdini ²å¼ş³¡¾°ÏÂ£©
+        // è·å–å½“å‰ DLL/æ’ä»¶çš„è·¯å¾„ï¼ˆHoudini æ’ä»¶åœºæ™¯ä¸‹ï¼‰
         QString current_file = QFileInfo(__FILE__).absoluteFilePath();
         QDir plugin_dir = QFileInfo(current_file).dir();
 
-        // ÏòÉÏÌø×ª 3 ¼¶Ä¿Â¼£¨¶ÔÓ¦ Python µÄ os.path.dirname Èı´Î£©
+        // å‘ä¸Šè·³è½¬ 3 çº§ç›®å½•ï¼ˆå¯¹åº” Python çš„ os.path.dirname ä¸‰æ¬¡ï¼‰
         for (int i = 0; i < 3; ++i) {
             if (!plugin_dir.cdUp()) {
                 LOG_ERROR("Failed to get parent directory for package path");
@@ -57,13 +57,13 @@ QString get_package_path() {
 }
 
 // -----------------------------------------------------------------------------
-// ¶ÔÓ¦ Python: load_asset_path(file)
+// å¯¹åº” Python: load_asset_path(file)
 // -----------------------------------------------------------------------------
 QString load_asset_path(const QString& file) {
-    // ¼ì²éÅäÖÃÎÄ¼şÊÇ·ñ´æÔÚ
+    // æ£€æŸ¥é…ç½®æ–‡ä»¶æ˜¯å¦å­˜åœ¨
     if (!QFileInfo::exists(file)) {
         LOG_ERROR(QString("Config file not found: %1").arg(file));
-        return abspath("");  // ·µ»ØÄ¬ÈÏÂ·¾¶
+        return abspath("");  // è¿”å›é»˜è®¤è·¯å¾„
     }
 
     QFile config_file(file);
@@ -72,7 +72,7 @@ QString load_asset_path(const QString& file) {
         return abspath("");
     }
 
-    // ½âÎö JSON ÅäÖÃ
+    // è§£æ JSON é…ç½®
     QJsonParseError json_error;
     QJsonDocument json_doc = QJsonDocument::fromJson(config_file.readAll(), &json_error);
     config_file.close();
@@ -87,20 +87,20 @@ QString load_asset_path(const QString& file) {
         return abspath("");
     }
 
-    // ÌáÈ¡ asset_path ²¢½âÎö¾ø¶ÔÂ·¾¶
+    // æå– asset_path å¹¶è§£æç»å¯¹è·¯å¾„
     QJsonObject config_obj = json_doc.object();
     QString saved_path = config_obj["asset_path"].toString("");
     return abspath(saved_path);
 }
 
 // -----------------------------------------------------------------------------
-// ¶ÔÓ¦ Python: save_asset_path(scf, sa)
+// å¯¹åº” Python: save_asset_path(scf, sa)
 // -----------------------------------------------------------------------------
 bool save_asset_path(const QString& scf, const QString& sa) {
     try {
         QJsonObject config_obj;
 
-        // ¶ÁÈ¡ÏÖÓĞÅäÖÃ£¨Èç¹ûÎÄ¼ş´æÔÚ£©
+        // è¯»å–ç°æœ‰é…ç½®ï¼ˆå¦‚æœæ–‡ä»¶å­˜åœ¨ï¼‰
         if (QFileInfo::exists(scf)) {
             QFile config_file(scf);
             if (!config_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -122,17 +122,17 @@ bool save_asset_path(const QString& scf, const QString& sa) {
             }
         }
 
-        // ¸üĞÂ asset_path£¨±£´æ¾ø¶ÔÂ·¾¶×Ö·û´®£©
+        // æ›´æ–° asset_pathï¼ˆä¿å­˜ç»å¯¹è·¯å¾„å­—ç¬¦ä¸²ï¼‰
         config_obj["asset_path"] = sa;
 
-        // Ğ´ÈëÅäÖÃÎÄ¼ş
+        // å†™å…¥é…ç½®æ–‡ä»¶
         QFile config_file(scf);
         if (!config_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             LOG_ERROR(QString("Failed to write config file: %1").arg(config_file.errorString()));
             return false;
         }
 
-        // ¸ñÊ½»¯ JSON Êä³ö£¨indent=4£¬Óë Python Ò»ÖÂ£©
+        // æ ¼å¼åŒ– JSON è¾“å‡ºï¼ˆindent=4ï¼Œä¸ Python ä¸€è‡´ï¼‰
         QJsonDocument json_doc(config_obj);
         config_file.write(json_doc.toJson(QJsonDocument::Indented));
         config_file.close();
@@ -140,9 +140,9 @@ bool save_asset_path(const QString& scf, const QString& sa) {
         return true;
     }
     catch (const std::exception& e) {
-        // µ÷ÓÃ Houdini µ¯´°ÏÔÊ¾´íÎó£¨Óë Python µÄ hou.ui.displayMessage Ò»ÖÂ£©
-        QString error_msg = QString("±£´æÅäÖÃÎÄ¼şÊ±³ö´í: %1").arg(e.what());
-        //HOUDINI::UI::displayMessage(error_msg.toStdString().c_str(), "´íÎó", HOUDINI::UI::MessageType::Error);
+        // è°ƒç”¨ Houdini å¼¹çª—æ˜¾ç¤ºé”™è¯¯ï¼ˆä¸ Python çš„ hou.ui.displayMessage ä¸€è‡´ï¼‰
+        QString error_msg = QString("ä¿å­˜é…ç½®æ–‡ä»¶æ—¶å‡ºé”™: %1").arg(e.what());
+        //HOUDINI::UI::displayMessage(error_msg.toStdString().c_str(), "é”™è¯¯", HOUDINI::UI::MessageType::Error);
         LOG_ERROR(error_msg);
         return false;
     }

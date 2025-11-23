@@ -1,4 +1,4 @@
-#ifndef ABS_PATH_H
+ï»¿#ifndef ABS_PATH_H
 #define ABS_PATH_H
 
 #include <QtCore/qstring.h>
@@ -9,34 +9,34 @@
 
 
 /**
- * ½âÎö¾ø¶ÔÂ·¾¶£¨¼æÈİ Houdini »·¾³±äÁ¿ºÍÂ·¾¶¹æÔò£©
- * ¶ÔÓ¦ Python: abspath(p)
- * @param p ÊäÈëÂ·¾¶×Ö·û´®£¨Ö§³Ö Houdini »·¾³±äÁ¿Èç $HIP¡¢$JOB£©
- * @return ½âÎöºóµÄ¾ø¶ÔÂ·¾¶£¨QString£©
+ * è§£æç»å¯¹è·¯å¾„ï¼ˆå…¼å®¹ Houdini ç¯å¢ƒå˜é‡å’Œè·¯å¾„è§„åˆ™ï¼‰
+ * å¯¹åº” Python: abspath(p)
+ * @param p è¾“å…¥è·¯å¾„å­—ç¬¦ä¸²ï¼ˆæ”¯æŒ Houdini ç¯å¢ƒå˜é‡å¦‚ $HIPã€$JOBï¼‰
+ * @return è§£æåçš„ç»å¯¹è·¯å¾„ï¼ˆQStringï¼‰
  */
 QString abspath(const QString& p);
 
 /**
- * »ñÈ¡²å¼ş°üÂ·¾¶£¨PolyHavenLink °üÂ·¾¶£©
- * ¶ÔÓ¦ Python: get_package_path()
- * @return ²å¼ş°ü¾ø¶ÔÂ·¾¶
+ * è·å–æ’ä»¶åŒ…è·¯å¾„ï¼ˆPolyHavenLink åŒ…è·¯å¾„ï¼‰
+ * å¯¹åº” Python: get_package_path()
+ * @return æ’ä»¶åŒ…ç»å¯¹è·¯å¾„
  */
 QString get_package_path();
 
 /**
- * ´ÓÅäÖÃÎÄ¼ş¼ÓÔØ×Ê²úÂ·¾¶
- * ¶ÔÓ¦ Python: load_asset_path(file)
- * @param file ÅäÖÃÎÄ¼şÂ·¾¶£¨Èç polyhaven_config.json£©
- * @return ½âÎöºóµÄ×Ê²ú¾ø¶ÔÂ·¾¶
+ * ä»é…ç½®æ–‡ä»¶åŠ è½½èµ„äº§è·¯å¾„
+ * å¯¹åº” Python: load_asset_path(file)
+ * @param file é…ç½®æ–‡ä»¶è·¯å¾„ï¼ˆå¦‚ polyhaven_config.jsonï¼‰
+ * @return è§£æåçš„èµ„äº§ç»å¯¹è·¯å¾„
  */
 QString load_asset_path(const QString& file);
 
 /**
- * ±£´æ×Ê²úÂ·¾¶µ½ÅäÖÃÎÄ¼ş
- * ¶ÔÓ¦ Python: save_asset_path(scf, sa)
- * @param scf ÅäÖÃÎÄ¼şÂ·¾¶
- * @param sa Òª±£´æµÄ×Ê²úÂ·¾¶£¨¾ø¶ÔÂ·¾¶£©
- * @return ÊÇ·ñ±£´æ³É¹¦
+ * ä¿å­˜èµ„äº§è·¯å¾„åˆ°é…ç½®æ–‡ä»¶
+ * å¯¹åº” Python: save_asset_path(scf, sa)
+ * @param scf é…ç½®æ–‡ä»¶è·¯å¾„
+ * @param sa è¦ä¿å­˜çš„èµ„äº§è·¯å¾„ï¼ˆç»å¯¹è·¯å¾„ï¼‰
+ * @return æ˜¯å¦ä¿å­˜æˆåŠŸ
  */
 bool save_asset_path(const QString& scf, const QString& sa);
 

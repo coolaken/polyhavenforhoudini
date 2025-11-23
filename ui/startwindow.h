@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <QtWidgets/qwidget.h>
 #include <QtCore/qmutex.h>
@@ -37,7 +37,7 @@
 #include "AssetModel.h"
 #include "ui_startwindow.h"
 
-// Ç°ÖÃÉùÃ÷£¨±ÜÃâÎ´¶¨Òå´íÎó£¬Èô AssetInfo ÓĞµ¥¶ÀÍ·ÎÄ¼ş¿É°üº¬£©
+// å‰ç½®å£°æ˜ï¼ˆé¿å…æœªå®šä¹‰é”™è¯¯ï¼Œè‹¥ AssetInfo æœ‰å•ç‹¬å¤´æ–‡ä»¶å¯åŒ…å«ï¼‰
 //struct AssetInfo;
 class phaPullFromPolyhaven;
 
@@ -50,20 +50,20 @@ class StartWindow : public QWidget
     Q_OBJECT
 
 private:
-    // 1. Ë½ÓĞ¹¹Ôìº¯Êı£º½ûÖ¹Íâ²¿Ö±½Ó new
+    // 1. ç§æœ‰æ„é€ å‡½æ•°ï¼šç¦æ­¢å¤–éƒ¨ç›´æ¥ new
     explicit StartWindow(QWidget* parent = nullptr);
-    // 2. Ë½ÓĞ¿½±´¹¹Ôì/¸³ÖµÔËËã·û£º½ûÖ¹¿½±´
+    // 2. ç§æœ‰æ‹·è´æ„é€ /èµ‹å€¼è¿ç®—ç¬¦ï¼šç¦æ­¢æ‹·è´
     StartWindow(const StartWindow&) = delete;
     StartWindow& operator=(const StartWindow&) = delete;
 
-    // 3. ¾²Ì¬³ÉÔ±£º´æ´¢Î¨Ò»ÊµÀı + Ïß³Ì°²È«Ëø
+    // 3. é™æ€æˆå‘˜ï¼šå­˜å‚¨å”¯ä¸€å®ä¾‹ + çº¿ç¨‹å®‰å…¨é”
     static StartWindow* s_instance;
     static QMutex s_mutex;
 
 public:
-    // 4. È«¾ÖÎ¨Ò»»ñÈ¡½Ó¿Ú£º²»´æÔÚÔò´´½¨£¬´æÔÚÔòÖ±½Ó·µ»Ø
+    // 4. å…¨å±€å”¯ä¸€è·å–æ¥å£ï¼šä¸å­˜åœ¨åˆ™åˆ›å»ºï¼Œå­˜åœ¨åˆ™ç›´æ¥è¿”å›
     static StartWindow* getInstance();
-    // 5. £¨¿ÉÑ¡£©°²È«Ïú»Ù½Ó¿Ú£¨±ÜÃâÄÚ´æĞ¹Â©£©
+    // 5. ï¼ˆå¯é€‰ï¼‰å®‰å…¨é”€æ¯æ¥å£ï¼ˆé¿å…å†…å­˜æ³„æ¼ï¼‰
     static void destroyInstance();
 
     ~StartWindow();
@@ -71,14 +71,14 @@ public:
 private:
     Ui::StartWindowClass* ui;
 
-    QCache<QString, QPixmap> m_thumbCache; // È«¾Ö»º´æ£¨¹© Delegate ¹²Ïí£©
+    QCache<QString, QPixmap> m_thumbCache; // å…¨å±€ç¼“å­˜ï¼ˆä¾› Delegate å…±äº«ï¼‰
     AssetDelegate* m_assetDelegate;
     QStatusBar* m_statusBar;
     AssetModel* m_assetModel;
 
     phaPullFromPolyhaven* m_polyhavenWorker = nullptr;
 
-    // Â·¾¶Ïà¹Ø
+    // è·¯å¾„ç›¸å…³
     QString m_packagePath;
     QString m_configFile;
     QString m_assetPath;
@@ -86,7 +86,7 @@ private:
     QString m_assetListCachePath;
     QString m_exrPath;
 
-    // Êı¾İÏà¹Ø
+    // æ•°æ®ç›¸å…³
     QMap<QString, QJsonObject> m_assetsData;
     QString m_searchText;
     QVector<QString> m_categoryList;
@@ -94,36 +94,36 @@ private:
 
     bool m_firstShow = true;
 
-    // UI ×é¼ş
+    // UI ç»„ä»¶
     QStandardItemModel* m_categoriesModel;
     QStandardItemModel* m_tagModel;
 
-    // ÊôĞÔÃæ°å±êÇ©
-    QLabel* m_labelName;    // Ãû³Æ
-    QLabel* m_labelSource;  // Ô´
-    QLabel* m_labelDesc;    // ÃèÊö
-    QLabel* m_labelAuthor;  // ×÷Õß
+    // å±æ€§é¢æ¿æ ‡ç­¾
+    QLabel* m_labelName;    // åç§°
+    QLabel* m_labelSource;  // æº
+    QLabel* m_labelDesc;    // æè¿°
+    QLabel* m_labelAuthor;  // ä½œè€…
 
-    // ·ÖÀàÓ³Éä
+    // åˆ†ç±»æ˜ å°„
     QHash<QString, QString> m_catalogNameToPathMap;
 
-    // ºËĞÄ£º¼ÓÔØ¿É¼ûÇøÓò¼°¸½½üµÄÍ¼Æ¬£¨½â¾ö¾²Ö¹²»¼ÓÔØÎÊÌâ£©
+    // æ ¸å¿ƒï¼šåŠ è½½å¯è§åŒºåŸŸåŠé™„è¿‘çš„å›¾ç‰‡ï¼ˆè§£å†³é™æ­¢ä¸åŠ è½½é—®é¢˜ï¼‰
     void loadVisibleAreaThumbs();
-    // ¼ÓÔØ×Ê²úÊı¾İ£¨Ô­ÓĞº¯Êı£©
+    // åŠ è½½èµ„äº§æ•°æ®ï¼ˆåŸæœ‰å‡½æ•°ï¼‰
     void loadAssets(bool filtered = false);
 
 public:
-    const QString ORG_NAME = "coolaken";   // ×Ô¶¨Òå£¨ÈçÄãµÄ¹«Ë¾/¸öÈËÃû³Æ£©
-    const QString APP_NAME = "polyhavenforhoudini";       // ×Ô¶¨Òå£¨ÈçÄãµÄ³ÌĞòÃû³Æ£©
-    const QString PATH_KEY = "LastFilepath";// ÅäÖÃÏîµÄ¼ü£¨ÓÃÓÚ¶ÁÈ¡/Ğ´Èë£©
+    const QString ORG_NAME = "coolaken";   // è‡ªå®šä¹‰ï¼ˆå¦‚ä½ çš„å…¬å¸/ä¸ªäººåç§°ï¼‰
+    const QString APP_NAME = "polyhavenforhoudini";       // è‡ªå®šä¹‰ï¼ˆå¦‚ä½ çš„ç¨‹åºåç§°ï¼‰
+    const QString PATH_KEY = "LastFilepath";// é…ç½®é¡¹çš„é”®ï¼ˆç”¨äºè¯»å–/å†™å…¥ï¼‰
     static QString s_lastPath;
 
 protected:
-    // ÖØĞ´³ß´ç±ä»¯ÊÂ¼ş£º´°¿ÚËõ·ÅÊ±ÖØĞÂ²¼¾Ö ListView Ïî
+    // é‡å†™å°ºå¯¸å˜åŒ–äº‹ä»¶ï¼šçª—å£ç¼©æ”¾æ—¶é‡æ–°å¸ƒå±€ ListView é¡¹
     void resizeEvent(QResizeEvent* event) override;
-    // ÖØĞ´ÏÔÊ¾ÊÂ¼ş£º´°¿ÚÏÔÊ¾ºó¼ÓÔØµÚÒ»ÆÁÍ¼Æ¬
+    // é‡å†™æ˜¾ç¤ºäº‹ä»¶ï¼šçª—å£æ˜¾ç¤ºååŠ è½½ç¬¬ä¸€å±å›¾ç‰‡
     void showEvent(QShowEvent* event) override;
-    // ÖØĞ´¹Ø±ÕÊÂ¼ş£º£¨Ô­ÓĞÂß¼­±£Áô£©
+    // é‡å†™å…³é—­äº‹ä»¶ï¼šï¼ˆåŸæœ‰é€»è¾‘ä¿ç•™ï¼‰
     void closeEvent(QCloseEvent* event) override;
 
 private Q_SLOTS:
@@ -133,7 +133,7 @@ private Q_SLOTS:
 
     void onProgressUpdated(int current, int total, const QString& text);
 
-    // Â·¾¶Ñ¡ÔñÏà¹Ø
+    // è·¯å¾„é€‰æ‹©ç›¸å…³
     void showConfirmation(const QString& text = "all");
 
     //void test();
@@ -143,20 +143,20 @@ private Q_SLOTS:
     void savePathToConfig(const QString& path);
     QString loadPathFromConfig();
 
-    // ½âÎöÄ¿Â¼ÎÄ¼ş£¨Ô­ÓĞº¯Êı£©
+    // è§£æç›®å½•æ–‡ä»¶ï¼ˆåŸæœ‰å‡½æ•°ï¼‰
     QStringList parseCatalogFile();
-    // ¹¹½¨Ê÷ĞÎÄ£ĞÍ£¨Ô­ÓĞº¯Êı£©
+    // æ„å»ºæ ‘å½¢æ¨¡å‹ï¼ˆåŸæœ‰å‡½æ•°ï¼‰
     QStandardItemModel* buildTreeModel(const QStringList& sortedPaths);
-    // Ó¦ÓÃÉ¸Ñ¡£¨Ô­ÓĞº¯Êı£©
+    // åº”ç”¨ç­›é€‰ï¼ˆåŸæœ‰å‡½æ•°ï¼‰
     void applyFilter();
-    // É¸Ñ¡×Ê²ú£¨Ô­ÓĞº¯Êı£©
+    // ç­›é€‰èµ„äº§ï¼ˆåŸæœ‰å‡½æ•°ï¼‰
     QMap<QString, QJsonObject> filterAssets() const;
-    // ¼ÓÔØÊ÷ĞÎÄ£ĞÍ£¨Ô­ÓĞº¯Êı£©
+    // åŠ è½½æ ‘å½¢æ¨¡å‹ï¼ˆåŸæœ‰å‡½æ•°ï¼‰
     void loadTreeModel();
-    // ·ÖÀàµã»÷ÊÂ¼ş£¨Ô­ÓĞº¯Êı£©
+    // åˆ†ç±»ç‚¹å‡»äº‹ä»¶ï¼ˆåŸæœ‰å‡½æ•°ï¼‰
     void onCategoryClicked(const QModelIndex& index);
-    // ¸üĞÂÎÄ±¾£¨Ô­ÓĞº¯Êı£©
+    // æ›´æ–°æ–‡æœ¬ï¼ˆåŸæœ‰å‡½æ•°ï¼‰
     void updateText(const QString& text);
-    // ×Ê²úÔ¤ÀÀÊÂ¼ş£¨¹© Delegate µ÷ÓÃ£©
+    // èµ„äº§é¢„è§ˆäº‹ä»¶ï¼ˆä¾› Delegate è°ƒç”¨ï¼‰
     void onAssetPreview(const QVariantMap& asset);
 };
