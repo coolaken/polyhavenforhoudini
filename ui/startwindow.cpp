@@ -91,6 +91,7 @@ void StartWindow::destroyInstance()
 
 StartWindow::~StartWindow()
 {
+    m_polyhavenWorker->cancelDownload();
     delete ui;
 }
 
@@ -238,6 +239,7 @@ void StartWindow::showConfirmation(const QString& text)
 
 
 //TODO
+/*
 void StartWindow::test()
 {
     QUrl myUrl = QString("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/abandoned_church_2k.hdr");
@@ -248,6 +250,7 @@ void StartWindow::test()
 
     download_file(myUrl, savePath);
 }
+*/
 
 
 

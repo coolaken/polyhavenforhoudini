@@ -422,13 +422,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="testBtn">
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
@@ -461,7 +454,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1357</x>
-     <y>785</y>
+     <y>825</y>
     </hint>
     <hint type="destinationlabel">
      <x>1117</x>
@@ -530,22 +523,6 @@
     <hint type="destinationlabel">
      <x>113</x>
      <y>141</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>testBtn</sender>
-   <signal>clicked()</signal>
-   <receiver>StartWindowClass</receiver>
-   <slot>test()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1241</x>
-     <y>824</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1439</x>
-     <y>901</y>
     </hint>
    </hints>
   </connection>

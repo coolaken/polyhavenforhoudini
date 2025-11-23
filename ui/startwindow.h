@@ -136,7 +136,7 @@ private Q_SLOTS:
     // 路径选择相关
     void showConfirmation(const QString& text = "all");
 
-    void test();
+    //void test();
     void onTextChanged(const QString& text);
     void canceldownload();
 
