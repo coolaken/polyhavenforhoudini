@@ -12,6 +12,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QStringList>
 #include <QtCore/qcache.h>
+#include <QtCore/qmutex.h>
 
 // 自定义角色：存储目录完整路径（与 Python 中的 CATALOG_PATH_ROLE 对应）
 const int CATALOG_PATH_ROLE = Qt::UserRole + 100;
@@ -34,14 +35,16 @@ public:
     void loadThumbInThread(const QString& imgPath) const;
 private:
     void startDrag(const QModelIndex& index);
-    // 子线程加载单张缩略图（内部调用，避免重复加载）
+    // 新增：判断 WebP 文件是否完整
+    bool isWebpComplete(const QString& imgPath) const;
 
 private:
     QSize m_cardSize;                  // 卡片固定尺寸
     QPoint m_dragStartPos;             // 拖动起始位置
     QVariantMap m_draggedAsset;        // 拖动的资产数据
     QCache<QString, QPixmap>* m_thumbCache = nullptr; // 缩略图缓存（外部传入，共享）
-    mutable QThread* m_loadThread = nullptr; // 临时加载线程（mutable 允许 const 函数中修改）
+    mutable QPointer<QThread> m_loadThread = nullptr; // 临时加载线程（mutable 允许 const 函数中修改）
+    mutable QMutex m_cacheMutex;
 };
 
 

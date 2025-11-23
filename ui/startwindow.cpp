@@ -130,6 +130,7 @@ void StartWindow::loadVisibleAreaThumbs()
         QVariantMap asset = idx.data(AssetModel::AssetDataRole).toMap();
         QString imgPath = asset.value("local_thumbnail_path").toString();
 
+
         // 缓存未命中时，启动子线程加载（避免重复加载）
         if (!imgPath.isEmpty() && !m_thumbCache.contains(imgPath)) {
             m_assetDelegate->loadThumbInThread(imgPath);

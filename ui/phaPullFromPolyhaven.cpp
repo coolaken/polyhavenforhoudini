@@ -221,9 +221,7 @@ QString phaPullFromPolyhaven::downloadAsset(const QMap<QString, QJsonObject>& as
     QJsonObject infoJson = asset.value(asset.firstKey());
     QJsonObject downloadJson;
     if (!infofileinfo.exists() || infofileinfo.size() == 0)
-    {
-        //QString infoUrl = QString("https://api.polyhaven.com/files/%1").arg(asset.firstKey());//https://api.polyhaven.com/files/billiard_hall
-        //downloadJson = winhttp_get_json(infoUrl);
+    {        
         QUrl infoUrl = QString("https://api.polyhaven.com/files/%1").arg(asset.firstKey());
         
         downloadJson = QJsonDocument::fromJson(get(infoUrl)).object();
@@ -272,9 +270,6 @@ QString phaPullFromPolyhaven::downloadAsset(const QMap<QString, QJsonObject>& as
 
 
 
-
-    //QString error;
-
     QString thumbName = QString("thumbnail.webp");
     QString thumbPath = assetDir.filePath(thumbName);
     QFile thumbfile(thumbPath);
@@ -293,36 +288,6 @@ QString phaPullFromPolyhaven::downloadAsset(const QMap<QString, QJsonObject>& as
 
 
 
-    /*
-    QFile thumbfile(thumbPath);
-    QFileInfo thumbfileinfo(thumbfile);
-    if (!thumbfileinfo.exists() || thumbfileinfo.size() == 0)
-    {
-        if (!thumbfile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered))
-        {
-            return QString("Failed to open %1 for writing: %2").arg(thumbName).arg(thumbfile.errorString());
-        }
-
-        QString thumbUrl = QString("https://cdn.polyhaven.com/asset_img/thumbs/%1.png?width=256&height=256").arg(asset.firstKey());  //("https://cdn.polyhaven.com/asset_img/thumbs/%1.png?width=256&height=256").arg(asset.slug)
-        
-        QByteArray thumbContent = winhttp_get_binary(thumbUrl, error);
-
-        if (!error.isEmpty())
-        {
-            thumbfile.close();
-            thumbfile.remove();
-            return QString("Failed to download %1: %2").arg(thumbName).arg(error);
-        }
-
-        thumbfile.write(thumbContent);
-        thumbfile.close();
-
-        
-    }
-    */
-    
-
-    //QDir Dir(libDirPath.filePath(asset.slug));
 
 
 

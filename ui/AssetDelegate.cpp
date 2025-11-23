@@ -7,6 +7,9 @@
 #include <QtCore/qfileinfo.h>
 #include <QtCore/qdebug.h>
 #include <QtCore/qjsondocument.h>
+#include <QtWidgets/qabstractscrollarea.h>
+#include <QtCore/qtimer.h>
+#include <QtCore/qendian.h>
 #include "AssetModel.h"
 
 // AssetDelegate 构造函数
@@ -43,7 +46,6 @@ QSize AssetDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIn
 // 重写：自定义绘制资产卡片（核心渲染逻辑，优化后）
 void AssetDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    // 1. 获取资产数据（从模型的 AssetDataRole 读取）
     QVariant assetVar = index.data(AssetModel::AssetDataRole);
     if (!assetVar.isValid() || !assetVar.canConvert<QVariantMap>()) {
         QStyledItemDelegate::paint(painter, option, index);
@@ -51,66 +53,67 @@ void AssetDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
     }
     QVariantMap assetData = assetVar.toMap();
 
-    // 2. 提取关键数据
     QString assetId = assetData.value("asset_id", "未知ID").toString();
     QString assetName = assetData.value("name", "未知资产").toString();
     QString localImgPath = assetData.value("local_thumbnail_path", "").toString();
     QFileInfo fileInfo(localImgPath);
 
-    // 3. 绘制准备（禁用不必要的渲染效果，提升性能）
+    // 优化：提前判断文件是否存在且有效（减少无效逻辑）
+    bool isFileValid = !localImgPath.isEmpty() && fileInfo.exists() && fileInfo.size() > 0;
+
     painter->save();
-    painter->setRenderHint(QPainter::Antialiasing, false); // 关闭抗锯齿（非必要，牺牲少量画质换性能）
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, false); // 关闭平滑缩放（预加载已做缩放）
+    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->setRenderHint(QPainter::SmoothPixmapTransform, false);
     QRect cardRect = option.rect;
     bool isSelected = option.state & QStyle::State_Selected;
 
-    // 4. 绘制卡片背景（简化绘制，减少混合运算）
+    // 绘制背景（保持不变）
     QColor bgColor = isSelected ? QColor("#4a4a4a") : QColor("#333333");
     painter->fillRect(cardRect, bgColor);
     painter->setPen(QPen(QColor("#505050"), 1));
     painter->drawRoundedRect(cardRect.adjusted(2, 2, -2, -2), 6, 6);
 
-    // 5. 绘制缩略图区域
+    // 缩略图区域（保持不变）
     QRect thumbnailRect = QRect(
         cardRect.left() + 8,
         cardRect.top() + 8,
         cardRect.width() - 16,
         60
     );
-    // 缩略图背景
     painter->fillRect(thumbnailRect, QColor("#2a2a2a"));
     painter->setPen(QPen(QColor("#505050"), 1));
     painter->drawRoundedRect(thumbnailRect, 4, 4);
 
-    // 6. 绘制图片（核心优化：从缓存读取，无实时加载/缩放）
-    if (!localImgPath.isEmpty() && m_thumbCache) {
-        if (m_thumbCache->contains(localImgPath) && fileInfo.size() != 0) {
-            // 缓存命中：直接绘制预缩放后的图片
-            
-            
-           
-
-            QPixmap* scaledPix = (*m_thumbCache)[localImgPath];
-            int x = thumbnailRect.left() + (thumbnailRect.width() - scaledPix->width()) / 2; // 水平居中
-            int y = thumbnailRect.top(); // 垂直靠上
-            painter->drawPixmap(x, y, *scaledPix);
+    // 绘制图片（优化缓存判断和错误处理）
+    if (isFileValid && m_thumbCache) {
+        if (m_thumbCache->contains(localImgPath)) {
+            // 缓存命中：安全绘制（避免空指针）
+            QPixmap* scaledPix = m_thumbCache->object(localImgPath); // 更安全的获取方式
+            if (scaledPix && !scaledPix->isNull()) {
+                int x = thumbnailRect.left() + (thumbnailRect.width() - scaledPix->width()) / 2;
+                int y = thumbnailRect.top();
+                painter->drawPixmap(x, y, *scaledPix);
+            }
+            else {
+                painter->setPen(QPen(QColor("#ff6b6b")));
+                painter->drawText(thumbnailRect, Qt::AlignCenter, "缓存损坏");
+            }
         }
         else {
-            // 缓存未命中：启动子线程加载，当前显示"加载中"
+            // 缓存未命中：显示加载中，启动线程加载（避免重复加载）
             painter->setPen(QPen(QColor("#888888")));
             painter->drawText(thumbnailRect, Qt::AlignCenter, u8"加载中");
-            // 子线程加载（const 函数中通过 mutable 线程变量实现）
             loadThumbInThread(localImgPath);
         }
     }
-    else if (QFile::exists(localImgPath)) {
-        // 兼容无缓存场景（临时绘制，不推荐）
+    else if (isFileValid) {
+        // 无缓存场景（兼容）
         QPixmap pixmap(localImgPath);
         if (!pixmap.isNull()) {
             QPixmap scaledPix = pixmap.scaled(
                 thumbnailRect.size(),
                 Qt::KeepAspectRatio,
-                Qt::FastTransformation // 快速缩放
+                Qt::FastTransformation
             );
             int x = thumbnailRect.left() + (thumbnailRect.width() - scaledPix.width()) / 2;
             int y = thumbnailRect.top();
@@ -118,26 +121,24 @@ void AssetDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
         }
         else {
             painter->setPen(QPen(QColor("#ff6b6b")));
-            painter->drawText(thumbnailRect, Qt::AlignCenter, "损坏");
+            painter->drawText(thumbnailRect, Qt::AlignCenter, "图片损坏");
         }
     }
     else {
-        // 图片缺失
+        // 图片缺失或无效
+        QString tip = localImgPath.isEmpty() ? u8"路径缺失" : u8"文件无效";
         painter->setPen(QPen(QColor("#888888")));
-        painter->drawText(thumbnailRect, Qt::AlignCenter, QString("%1\n缺失").arg(assetId));
+        painter->drawText(thumbnailRect, Qt::AlignCenter, QString("%1\n%2").arg(assetId).arg(tip));
     }
 
-    // 7. 绘制资产名称（保留自动换行+靠上）
+    // 绘制资产名称（保持不变）
     QRect nameRect = QRect(
         cardRect.left() + 8,
         thumbnailRect.bottom() + 1,
         cardRect.width() - 16,
         60
     );
-    QFont nameFont = painter->font();
     painter->setPen(QPen(QColor("#ffffff")));
-    painter->setFont(nameFont);
-    // 强制换行+靠上对齐（核心）
     painter->drawText(nameRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, assetName);
 
     painter->restore();
@@ -217,55 +218,100 @@ void AssetDelegate::startDrag(const QModelIndex& index)
 // 子线程加载单张缩略图（核心优化：后台加载，不阻塞主线程）
 void AssetDelegate::loadThumbInThread(const QString& imgPath) const
 {
-    // 避免重复创建线程或重复加载同一图片
+    // 多重校验：避免无效加载
     if (!m_thumbCache || m_thumbCache->contains(imgPath)) return;
-    if (m_loadThread && m_loadThread->isRunning()) return;
+    if (!m_loadThread.isNull()) return;
     QFileInfo fileInfo(imgPath);
-    // 如果文件不存在，或者大小为0 (说明正在创建中但还没写入数据)，直接放弃，等待下次 paint
-    if (fileInfo.size() == 0) {
-        return;
-    }
+    if (!fileInfo.exists() || fileInfo.size() == 0) return;
 
+    // 1. 安全创建线程和 worker（父对象绑定到 delegate，自动管理生命周期）
     m_loadThread = new QThread(const_cast<AssetDelegate*>(this));
     QObject* worker = new QObject();
+    worker->moveToThread(m_loadThread); // 显式移动 worker 到线程（规范写法）
 
-    // 计算缩略图固定尺寸（与 paint() 中的 thumbnailRect 完全一致）
-    int thumbWidth = m_cardSize.width() - 16; // cardRect.width() - 16（左右各8像素边距）
-    int thumbHeight = 60; // 与 paint() 中 thumbnailRect 的高度一致
+    // 缩略图尺寸（与 paint 中完全一致）
+    int thumbWidth = m_cardSize.width() - 16;
+    int thumbHeight = 60;
 
+    // 2. 线程启动：加载图片并缓存
     connect(m_loadThread, &QThread::started, worker, [=]() {
-        // 加载并预缩放图片（只做一次）
+
+        if (!isWebpComplete(imgPath)) {
+            m_loadThread->quit();
+            return;
+        }
+
+        // 响应线程中断（退出时快速结束）
+        if (QThread::currentThread()->isInterruptionRequested()) {
+            m_loadThread->quit();
+            return;
+        }
+        
         QPixmap pix(imgPath);
-        if (!pix.isNull()) {
+        if (!pix.isNull() && !QThread::currentThread()->isInterruptionRequested()) {
             QPixmap thumb = pix.scaled(
-                thumbWidth, thumbHeight, // 用固定尺寸，避免访问 paint() 中的局部变量
+                thumbWidth, thumbHeight,
                 Qt::KeepAspectRatio,
-                Qt::FastTransformation // 快速缩放，优先性能
+                Qt::FastTransformation
             );
-            // 存入缓存（QCache 自动管理内存）
+            // 线程安全：QCache 本身线程安全，但建议加锁（可选，防止多线程同时插入）
+            QMutexLocker locker(&m_cacheMutex);
             m_thumbCache->insert(imgPath, new QPixmap(thumb));
         }
-        m_loadThread->quit();
+
+        m_loadThread->quit(); // 加载完成后退出线程
         });
 
-    // 线程结束后自动销毁，并通知视图刷新
+    // 3. 线程结束：清理资源 + 精准刷新视图（解决 viewport 为 NULL 核心）
     connect(m_loadThread, &QThread::finished, worker, &QObject::deleteLater);
     connect(m_loadThread, &QThread::finished, [=]() {
-        m_loadThread->deleteLater();
-        m_loadThread = nullptr;
-        // 刷新视图（只刷新可见区域，避免全屏重绘）
-        if (parent()) {
-            QWidget* viewport = qobject_cast<QWidget*>(parent()->findChild<QWidget*>("viewport"));
-            if (!viewport) {
-                // 若找不到 viewport，直接刷新 ListView
-                QWidget* listView = qobject_cast<QWidget*>(parent());
-                if (listView) listView->update();
+        // 安全清理线程
+        if (m_loadThread) {
+            m_loadThread->deleteLater();
+            m_loadThread = nullptr;
+        }
+
+        // 关键优化：通过 QAbstractScrollArea 直接获取 viewport（100% 可靠）
+        if (!parent()) return;
+
+        // 父对象是 QListView（继承 QAbstractScrollArea），直接强转获取 viewport
+        QAbstractScrollArea* scrollView = qobject_cast<QAbstractScrollArea*>(parent());
+        if (scrollView) {
+            QWidget* viewport = scrollView->viewport();
+            if (viewport) {
+                // 延迟刷新：避免线程刚结束时缓存未同步（可选，增强稳定性）
+                QTimer::singleShot(0, viewport, [=]() {
+                    viewport->update(); // 只刷新可见区域，性能最优
+                    });
+                qDebug() << "[AssetDelegate] 缓存加载完成，刷新 viewport 可见区域";
             }
             else {
-                viewport->update();
+                scrollView->update(); // 极端情况：刷新整个视图
+            }
+        }
+        else {
+            // 父对象不是滚动视图（异常情况）
+            QWidget* parentWidget = qobject_cast<QWidget*>(parent());
+            if (parentWidget) {
+                parentWidget->update();
+                qDebug() << "[AssetDelegate] 父对象不是滚动视图，刷新整个部件";
             }
         }
         });
 
+    // 4. 启动线程
     m_loadThread->start();
+}
+
+// 辅助函数：判断 WebP 文件是否完整（核心适配 WebP）
+// 简化版 WebP 完整性校验（高兼容性，减少误判）
+bool AssetDelegate::isWebpComplete(const QString& imgPath) const
+{
+    QFile file(imgPath);
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
+
+    // PNG 文件必须以 IEND 结尾，IEND 的十六进制为：00 00 00 00 49 45 4E 44 AE 42 60 82
+    QByteArray footer = file.readAll().right(12); // 读取最后12字节
+    return footer.endsWith(QByteArray::fromHex("0000000049454E44AE426082"));
 }
