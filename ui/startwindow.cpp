@@ -1,4 +1,4 @@
-#include "startwindow.h"
+ï»¿#include "startwindow.h"
 #include <QtNetwork/QSslSocket>
 #include <iostream>
 #include <string>
@@ -12,7 +12,7 @@
 
 #include "download_file.h"
 
-// ¾²Ì¬³ÉÔ±³õÊ¼»¯
+// é™æ€æˆå‘˜åˆå§‹åŒ–
 QString StartWindow::s_lastPath = "";
 StartWindow* StartWindow::s_instance = nullptr;
 QMutex StartWindow::s_mutex;
@@ -23,10 +23,10 @@ StartWindow::StartWindow(QWidget* parent)
 {
     ui->setupUi(this);
 
-    // »º´æ³õÊ¼»¯£¨900ÕÅÍ¼½¨Òé»º´æ300ÕÅ£¬Æ½ºâÄÚ´æºÍ¼ÓÔØËÙ¶È£©
+    // ç¼“å­˜åˆå§‹åŒ–ï¼ˆ900å¼ å›¾å»ºè®®ç¼“å­˜300å¼ ï¼Œå¹³è¡¡å†…å­˜å’ŒåŠ è½½é€Ÿåº¦ï¼‰
     m_thumbCache.setMaxCost(300);
     m_assetDelegate = new AssetDelegate(this);
-    m_assetDelegate->setThumbCache(&m_thumbCache); // ´«µİ»º´æ¸øÎ¯ÍĞ
+    m_assetDelegate->setThumbCache(&m_thumbCache); // ä¼ é€’ç¼“å­˜ç»™å§”æ‰˜
 
     QVBoxLayout* mainLayout = new QVBoxLayout;
     mainLayout->addWidget(ui->horizontalLayoutWidget);
@@ -46,21 +46,21 @@ StartWindow::StartWindow(QWidget* parent)
     m_categoriesModel = nullptr;
     m_tagModel = new QStandardItemModel(this);
 
-    // ³õÊ¼»¯ ListView »ù´¡ÓÅ»¯£¨ÌáÇ°ÅäÖÃ£¬±ÜÃâÖØ¸´ÉèÖÃ£©
+    // åˆå§‹åŒ– ListView åŸºç¡€ä¼˜åŒ–ï¼ˆæå‰é…ç½®ï¼Œé¿å…é‡å¤è®¾ç½®ï¼‰
     if (ui->m_assetListView) {
         ui->m_assetListView->setViewMode(QListView::IconMode);
-        ui->m_assetListView->setUniformItemSizes(true); // ¹Ø¼ü£ºÆôÓÃÏî¸´ÓÃ
-        ui->m_assetListView->setBatchSize(200); // ÅúÁ¿»æÖÆ
-        ui->m_assetListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel); // ÏñËØ¼¶¹ö¶¯
-        ui->m_assetListView->setSpacing(8); // ¿¨Æ¬¼ä¾à
-        ui->m_assetListView->setResizeMode(QListView::Adjust); // ´°¿ÚËõ·Å×Ô¶¯µ÷Õû
-        ui->m_assetListView->setStyleSheet("QListView { show-decoration-selected: 0; background-color: #222222; }"); // ½ûÓÃÑ¡ÖĞ¶¯»­
+        ui->m_assetListView->setUniformItemSizes(true); // å…³é”®ï¼šå¯ç”¨é¡¹å¤ç”¨
+        ui->m_assetListView->setBatchSize(200); // æ‰¹é‡ç»˜åˆ¶
+        ui->m_assetListView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel); // åƒç´ çº§æ»šåŠ¨
+        ui->m_assetListView->setSpacing(8); // å¡ç‰‡é—´è·
+        ui->m_assetListView->setResizeMode(QListView::Adjust); // çª—å£ç¼©æ”¾è‡ªåŠ¨è°ƒæ•´
+        ui->m_assetListView->setStyleSheet("QListView { show-decoration-selected: 0; background-color: #222222; }"); // ç¦ç”¨é€‰ä¸­åŠ¨ç”»
     }
 
-    // °ó¶¨¹ö¶¯ÊÂ¼ş£º¹ö¶¯Ê±Ô¤¼ÓÔØ¿É¼ûÇøÓò¸½½üÍ¼Æ¬
+    // ç»‘å®šæ»šåŠ¨äº‹ä»¶ï¼šæ»šåŠ¨æ—¶é¢„åŠ è½½å¯è§åŒºåŸŸé™„è¿‘å›¾ç‰‡
     if (ui->m_assetListView) {
         connect(ui->m_assetListView->verticalScrollBar(), &QScrollBar::valueChanged, this, [=]() {
-            // ÑÓ³Ù50msÖ´ĞĞ£¬±ÜÃâ¹ö¶¯¹ı³ÌÖĞÆµ·±µ÷ÓÃ
+            // å»¶è¿Ÿ50msæ‰§è¡Œï¼Œé¿å…æ»šåŠ¨è¿‡ç¨‹ä¸­é¢‘ç¹è°ƒç”¨
             QTimer::singleShot(50, this, &StartWindow::loadVisibleAreaThumbs);
             });
     }
@@ -94,44 +94,44 @@ StartWindow::~StartWindow()
     delete ui;
 }
 
-// ºËĞÄÊµÏÖ£º¼ÓÔØ¿É¼ûÇøÓò¼°¸½½üÍ¼Æ¬£¨½â¾ö¾²Ö¹²»¼ÓÔØÎÊÌâ£©
+// æ ¸å¿ƒå®ç°ï¼šåŠ è½½å¯è§åŒºåŸŸåŠé™„è¿‘å›¾ç‰‡ï¼ˆè§£å†³é™æ­¢ä¸åŠ è½½é—®é¢˜ï¼‰
 void StartWindow::loadVisibleAreaThumbs()
 {
     if (!ui->m_assetListView || !m_assetModel || m_assetModel->rowCount() == 0) {
         return;
     }
 
-    // »ñÈ¡¿É¼ûÇøÓò¾ØĞÎ£¨ÊÓ¿Ú±¾µØ×ø±ê£©
+    // è·å–å¯è§åŒºåŸŸçŸ©å½¢ï¼ˆè§†å£æœ¬åœ°åæ ‡ï¼‰
     QRect viewRect = ui->m_assetListView->viewport()->rect();
-    // ×ª»»¾ØĞÎµÄ×óÉÏ½ÇºÍÓÒÏÂ½Çµ½ ListView ×ø±êÏµ£¨mapToParent Ö»Ö§³Öµã×ª»»£©
+    // è½¬æ¢çŸ©å½¢çš„å·¦ä¸Šè§’å’Œå³ä¸‹è§’åˆ° ListView åæ ‡ç³»ï¼ˆmapToParent åªæ”¯æŒç‚¹è½¬æ¢ï¼‰
     QPoint topLeft = ui->m_assetListView->viewport()->mapToParent(viewRect.topLeft());
     QPoint bottomRight = ui->m_assetListView->viewport()->mapToParent(viewRect.bottomRight());
-    // ÓÃ×ª»»ºóµÄÁ½µãÖØĞÂ¹¹Ôì¾ØĞÎ
+    // ç”¨è½¬æ¢åçš„ä¸¤ç‚¹é‡æ–°æ„é€ çŸ©å½¢
     viewRect = QRect(topLeft, bottomRight);
 
-    // »ñÈ¡¿É¼ûÇøÓòµÄÆğÊ¼ºÍ½áÊøĞĞË÷Òı
+    // è·å–å¯è§åŒºåŸŸçš„èµ·å§‹å’Œç»“æŸè¡Œç´¢å¼•
     int visibleStart = ui->m_assetListView->indexAt(viewRect.topLeft()).row();
     int visibleEnd = ui->m_assetListView->indexAt(viewRect.bottomRight()).row();
 
-    // ´¦Àí±ß½çÇé¿ö£¨Î´»ñÈ¡µ½ÓĞĞ§Ë÷ÒıÊ±µÄÄ¬ÈÏ·¶Î§£©
+    // å¤„ç†è¾¹ç•Œæƒ…å†µï¼ˆæœªè·å–åˆ°æœ‰æ•ˆç´¢å¼•æ—¶çš„é»˜è®¤èŒƒå›´ï¼‰
     if (visibleStart == -1) visibleStart = 0;
-    if (visibleEnd == -1) visibleEnd = qMin(30, m_assetModel->rowCount() - 1); // Ä¬ÈÏ¼ÓÔØÇ°30ĞĞ
+    if (visibleEnd == -1) visibleEnd = qMin(30, m_assetModel->rowCount() - 1); // é»˜è®¤åŠ è½½å‰30è¡Œ
 
-    // À©Õ¹¼ÓÔØ·¶Î§£ºÇ°ºó¸÷15ĞĞ£¨ÌáÇ°»º´æ£¬¹ö¶¯ÎŞ¸ĞÖª£©
+    // æ‰©å±•åŠ è½½èŒƒå›´ï¼šå‰åå„15è¡Œï¼ˆæå‰ç¼“å­˜ï¼Œæ»šåŠ¨æ— æ„ŸçŸ¥ï¼‰
     int loadStart = qMax(0, visibleStart - 15);
     int loadEnd = qMin(m_assetModel->rowCount() - 1, visibleEnd + 15);
 
-    // ±éÀúĞèÒª¼ÓÔØµÄĞĞ£¬ÌáÈ¡Í¼Æ¬Â·¾¶²¢Ô¤¼ÓÔØ
+    // éå†éœ€è¦åŠ è½½çš„è¡Œï¼Œæå–å›¾ç‰‡è·¯å¾„å¹¶é¢„åŠ è½½
     for (int i = loadStart; i <= loadEnd; ++i) {
         QModelIndex idx = m_assetModel->index(i);
         if (!idx.isValid()) continue;
 
-        // ´ÓÄ£ĞÍ»ñÈ¡×Ê²úÊı¾İ£¨¶ÔÓ¦ AssetModel::AssetDataRole£©
+        // ä»æ¨¡å‹è·å–èµ„äº§æ•°æ®ï¼ˆå¯¹åº” AssetModel::AssetDataRoleï¼‰
         QVariantMap asset = idx.data(AssetModel::AssetDataRole).toMap();
         QString imgPath = asset.value("local_thumbnail_path").toString();
 
 
-        // »º´æÎ´ÃüÖĞÊ±£¬Æô¶¯×ÓÏß³Ì¼ÓÔØ£¨±ÜÃâÖØ¸´¼ÓÔØ£©
+        // ç¼“å­˜æœªå‘½ä¸­æ—¶ï¼Œå¯åŠ¨å­çº¿ç¨‹åŠ è½½ï¼ˆé¿å…é‡å¤åŠ è½½ï¼‰
         if (!imgPath.isEmpty() && !m_thumbCache.contains(imgPath)) {
             m_assetDelegate->loadThumbInThread(imgPath);
         }
@@ -142,10 +142,10 @@ void StartWindow::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
 
-    // ´°¿ÚËõ·ÅºóÖØĞÂ²¼¾Ö£¬²¢¼ÓÔØĞÂ¿É¼ûÇøÓòÍ¼Æ¬
+    // çª—å£ç¼©æ”¾åé‡æ–°å¸ƒå±€ï¼Œå¹¶åŠ è½½æ–°å¯è§åŒºåŸŸå›¾ç‰‡
     if (ui->m_assetListView) {
         ui->m_assetListView->doItemsLayout();
-        // ÑÓ³Ù¼ÓÔØ£¬±ÜÃâËõ·Å¹ı³ÌÖĞÆµ·±µ÷ÓÃ
+        // å»¶è¿ŸåŠ è½½ï¼Œé¿å…ç¼©æ”¾è¿‡ç¨‹ä¸­é¢‘ç¹è°ƒç”¨
         QTimer::singleShot(30, this, &StartWindow::loadVisibleAreaThumbs);
     }
 }
@@ -157,11 +157,11 @@ void StartWindow::showEvent(QShowEvent* event)
         m_firstShow = false;
         loadAssets(false);
         loadTreeModel();
-        // ´°¿ÚÏÔÊ¾ºó£¬ÑÓ³Ù¼ÓÔØµÚÒ»ÆÁÍ¼Æ¬£¨È·±£²¼¾ÖÍê³É£©
+        // çª—å£æ˜¾ç¤ºåï¼Œå»¶è¿ŸåŠ è½½ç¬¬ä¸€å±å›¾ç‰‡ï¼ˆç¡®ä¿å¸ƒå±€å®Œæˆï¼‰
         QTimer::singleShot(50, this, &StartWindow::loadVisibleAreaThumbs);
     }
     else {
-        // ·ÇÊ×´ÎÏÔÊ¾£¨Èç´°¿ÚÇĞ»»»ØÀ´£©£¬¼ÓÔØµ±Ç°¿É¼ûÇøÓò
+        // éé¦–æ¬¡æ˜¾ç¤ºï¼ˆå¦‚çª—å£åˆ‡æ¢å›æ¥ï¼‰ï¼ŒåŠ è½½å½“å‰å¯è§åŒºåŸŸ
         QTimer::singleShot(10, this, &StartWindow::loadVisibleAreaThumbs);
     }
 }
@@ -200,32 +200,32 @@ else:
 
 void StartWindow::onProgressUpdated(int current, int total, const QString& text)
 {
-    // 1. ¸üĞÂ½ø¶ÈÌõ£¨ÉèÖÃ×î´óÖµºÍµ±Ç°Öµ£©
+    // 1. æ›´æ–°è¿›åº¦æ¡ï¼ˆè®¾ç½®æœ€å¤§å€¼å’Œå½“å‰å€¼ï¼‰
     ui->m_progressBar->setMaximum(total);
     ui->m_progressBar->setValue(current);
 
-    // 2. ¸üĞÂ×´Ì¬ÎÄ±¾£¨ÏÔÊ¾¡°ÕıÔÚ´¦ÀíµÚ x/y ¸ö×Ê²ú¡±£©
+    // 2. æ›´æ–°çŠ¶æ€æ–‡æœ¬ï¼ˆæ˜¾ç¤ºâ€œæ­£åœ¨å¤„ç†ç¬¬ x/y ä¸ªèµ„äº§â€ï¼‰
     //m_statusLabel->setText(text);
     m_statusBar->showMessage(text);
 
-    // 3. ¿ÉÑ¡£ºÈÎÎñÍê³ÉºóÖØÖÃ UI
+    // 3. å¯é€‰ï¼šä»»åŠ¡å®Œæˆåé‡ç½® UI
     if (current == total) {
         //m_statusLabel->setText("Task completed!");
-        ui->m_progressBar->reset(); // »ò±£³Ö 100% ×´Ì¬
+        ui->m_progressBar->reset(); // æˆ–ä¿æŒ 100% çŠ¶æ€
     }
 }
 
 void StartWindow::showConfirmation(const QString& text)
 {
     if (text != "hdris") {
-        QMessageBox::information(this, u8"È¡Ïû", QString(u8"Polyhaven À­È¡²Ù×÷ÒÑÈ¡Ïû,Ö»Ö§³Öhdris£¡£¨ÀàĞÍ£º%1£©").arg(text));
+        QMessageBox::information(this, u8"å–æ¶ˆ", QString(u8"Polyhaven æ‹‰å–æ“ä½œå·²å–æ¶ˆ,åªæ”¯æŒhdrisï¼ï¼ˆç±»å‹ï¼š%1ï¼‰").arg(text));
         return;
     }
 
     QMessageBox::StandardButton reply = QMessageBox::question(
         this,
-        u8"²Ù×÷È·ÈÏ",
-        QString(u8"È·ÈÏÏÂÔØ %1 £¿").arg(text),
+        u8"æ“ä½œç¡®è®¤",
+        QString(u8"ç¡®è®¤ä¸‹è½½ %1 ï¼Ÿ").arg(text),
         QMessageBox::Yes | QMessageBox::No,
         QMessageBox::No
     );
@@ -244,8 +244,8 @@ void StartWindow::test()
 {
     QUrl myUrl = QString("https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/abandoned_church_2k.hdr");
 
-    // Ê¹ÓÃ Houdini »·¾³±äÁ¿À©Õ¹Â·¾¶
-    // ×¢Òâ£ºÈç¹ûÄãÓÃÁË libUT£¬¿ÉÒÔÓÃ UT_String ×ª»»£¬»òÕßÖ±½ÓÓ²±àÂë²âÊÔ
+    // ä½¿ç”¨ Houdini ç¯å¢ƒå˜é‡æ‰©å±•è·¯å¾„
+    // æ³¨æ„ï¼šå¦‚æœä½ ç”¨äº† libUTï¼Œå¯ä»¥ç”¨ UT_String è½¬æ¢ï¼Œæˆ–è€…ç›´æ¥ç¡¬ç¼–ç æµ‹è¯•
     QString savePath = "E:/testxx.hdr";
 
     download_file(myUrl, savePath);
@@ -260,7 +260,7 @@ void StartWindow::onTextChanged(const QString& text)
 {
     
     if (!m_polyhavenWorker) {
-        QMessageBox::critical(this, u8"´íÎó", u8"Polyhaven ¹¤¾ßÀàÊµÀı³õÊ¼»¯Ê§°Ü£¡");
+        QMessageBox::critical(this, u8"é”™è¯¯", u8"Polyhaven å·¥å…·ç±»å®ä¾‹åˆå§‹åŒ–å¤±è´¥ï¼");
         return;
     }
 
@@ -274,32 +274,32 @@ void StartWindow::onTextChanged(const QString& text)
         case 0:
             ui->fetchComboBtn->setEnabled(true);
             ui->m_cancelBtn->setEnabled(false);
-            QMessageBox::information(this, u8"³É¹¦", QString(u8"Polyhaven À­È¡²Ù×÷Ö´ĞĞÍê³É£¡£¨ÀàĞÍ£º%1£©").arg(text));
+            QMessageBox::information(this, u8"æˆåŠŸ", QString(u8"Polyhaven æ‹‰å–æ“ä½œæ‰§è¡Œå®Œæˆï¼ï¼ˆç±»å‹ï¼š%1ï¼‰").arg(text));
             break;
         case 1:
             ui->fetchComboBtn->setEnabled(true);
             ui->m_cancelBtn->setEnabled(false);
-            QMessageBox::information(this, u8"È¡Ïû", QString(u8"Polyhaven À­È¡²Ù×÷ÒÑÈ¡Ïû£¡£¨ÀàĞÍ£º%1£©").arg(text));
+            QMessageBox::information(this, u8"å–æ¶ˆ", QString(u8"Polyhaven æ‹‰å–æ“ä½œå·²å–æ¶ˆï¼ï¼ˆç±»å‹ï¼š%1ï¼‰").arg(text));
             break;
         case -1:
             ui->fetchComboBtn->setEnabled(true);
             ui->m_cancelBtn->setEnabled(false);
-            QMessageBox::critical(this, u8"Ê§°Ü", QString(u8"Î´ÕÒµ½×Ê²ú¿â£¬ÇëÏÈÔÚ´´½¨ \"Poly Haven\" ÎÄ¼ş¼Ğ£¡£¨ÀàĞÍ£º%1£©").arg(text));
+            QMessageBox::critical(this, u8"å¤±è´¥", QString(u8"æœªæ‰¾åˆ°èµ„äº§åº“ï¼Œè¯·å…ˆåœ¨åˆ›å»º \"Poly Haven\" æ–‡ä»¶å¤¹ï¼ï¼ˆç±»å‹ï¼š%1ï¼‰").arg(text));
             break;
         case -2:
             ui->fetchComboBtn->setEnabled(true);
             ui->m_cancelBtn->setEnabled(false);
-            QMessageBox::critical(this, u8"Ê§°Ü", QString(u8"×Ê²ú¿âÂ·¾¶²»´æÔÚ£¬Çë¼ì²éÂ·¾¶ÓĞĞ§ĞÔ£¡£¨ÀàĞÍ£º%1£©").arg(text));
+            QMessageBox::critical(this, u8"å¤±è´¥", QString(u8"èµ„äº§åº“è·¯å¾„ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥è·¯å¾„æœ‰æ•ˆæ€§ï¼ï¼ˆç±»å‹ï¼š%1ï¼‰").arg(text));
             break;
         case -3:
             ui->fetchComboBtn->setEnabled(true);
             ui->m_cancelBtn->setEnabled(false);
-            QMessageBox::critical(this, u8"Ê§°Ü", QString(u8"»ñÈ¡×Ê²úÁĞ±íÊ§°Ü£¡£¨ÀàĞÍ£º%1£©").arg(text));
+            QMessageBox::critical(this, u8"å¤±è´¥", QString(u8"è·å–èµ„äº§åˆ—è¡¨å¤±è´¥ï¼ï¼ˆç±»å‹ï¼š%1ï¼‰").arg(text));
             break;
         default:
             ui->fetchComboBtn->setEnabled(true);
             ui->m_cancelBtn->setEnabled(false);
-            QMessageBox::critical(this, u8"Ê§°Ü", QString(u8"Polyhaven À­È¡²Ù×÷Ö´ĞĞÊ§°Ü£¡£¨´íÎóÂë£º%1£¬ÀàĞÍ£º%2£©").arg(resultCode).arg(text));
+            QMessageBox::critical(this, u8"å¤±è´¥", QString(u8"Polyhaven æ‹‰å–æ“ä½œæ‰§è¡Œå¤±è´¥ï¼ï¼ˆé”™è¯¯ç ï¼š%1ï¼Œç±»å‹ï¼š%2ï¼‰").arg(resultCode).arg(text));
             break;
         }
         });
@@ -329,41 +329,41 @@ QString StartWindow::loadPathFromConfig()
 
 void StartWindow::loadAssets(bool filtered)
 {
-    /* 1. Çå¿Õ¾ÉÄ£ĞÍ */
+    /* 1. æ¸…ç©ºæ—§æ¨¡å‹ */
     if (m_assetModel) {
         m_assetModel->deleteLater();
         m_assetModel = nullptr;
     }
 
-    /* 2. ÈôÎŞÊı¾İ£¬ÖØĞÂ¼ÓÔØ */
+    /* 2. è‹¥æ— æ•°æ®ï¼Œé‡æ–°åŠ è½½ */
     if (m_assetsData.isEmpty()) {
         m_assetsData = get_asset_lib();
     }
 
-    /* 3. Êı¾İÓĞĞ§ĞÔ¼ì²é */
+    /* 3. æ•°æ®æœ‰æ•ˆæ€§æ£€æŸ¥ */
     if (m_assetsData.isEmpty() || !ui->m_assetListView) {
-        m_statusBar->showMessage(u8"Î´ÕÒµ½ÓĞĞ§×Ê²úÊı¾İ");
+        m_statusBar->showMessage(u8"æœªæ‰¾åˆ°æœ‰æ•ˆèµ„äº§æ•°æ®");
         return;
     }
 
-    /* 4. ´´½¨²¢°ó¶¨ĞÂÄ£ĞÍ */
+    /* 4. åˆ›å»ºå¹¶ç»‘å®šæ–°æ¨¡å‹ */
     if (!filtered) {
         m_assetModel = new AssetModel(m_assetsData, this);
         ui->m_assetListView->setModel(m_assetModel);
         ui->m_assetListView->setItemDelegate(m_assetDelegate);
         m_statusBar->showMessage(
-            QString(u8"¼ÓÔØÍê³É£º¹²%1¸ö×Ê²ú").arg(m_assetsData.size()));
+            QString(u8"åŠ è½½å®Œæˆï¼šå…±%1ä¸ªèµ„äº§").arg(m_assetsData.size()));
     }
     else {
-        // É¸Ñ¡³¡¾°µÄÄ£ĞÍÉèÖÃ£¨Ô­ÓĞÂß¼­±£Áô£©
+        // ç­›é€‰åœºæ™¯çš„æ¨¡å‹è®¾ç½®ï¼ˆåŸæœ‰é€»è¾‘ä¿ç•™ï¼‰
         QMap<QString, QJsonObject> filteredAssets = filterAssets();
         m_assetModel = new AssetModel(filteredAssets, this);
         ui->m_assetListView->setModel(m_assetModel);
         m_statusBar->showMessage(
-            QString(u8"É¸Ñ¡Íê³É£º¹²%1¸ö×Ê²ú").arg(filteredAssets.size()));
+            QString(u8"ç­›é€‰å®Œæˆï¼šå…±%1ä¸ªèµ„äº§").arg(filteredAssets.size()));
     }
 
-    // ×Ê²ú¼ÓÔØÍê³Éºó£¬´¥·¢Ò»´Î¿É¼ûÇøÓò¼ÓÔØ
+    // èµ„äº§åŠ è½½å®Œæˆåï¼Œè§¦å‘ä¸€æ¬¡å¯è§åŒºåŸŸåŠ è½½
     QTimer::singleShot(20, this, &StartWindow::loadVisibleAreaThumbs);
 }
 
@@ -406,9 +406,9 @@ void StartWindow::onAssetPreview(const QVariantMap& asset)
 
 
 
-    // ½âÎö tags£¨ĞŞ¸Äºó£©
+    // è§£æ tagsï¼ˆä¿®æ”¹åï¼‰
     auto tagsVar = asset["tags"];
-    if (tagsVar.typeName() == QString("QJsonValue")) { // ĞÂÔö£º´¦Àí QJsonValue ÀàĞÍ£¨JSON Êı×é£©
+    if (tagsVar.typeName() == QString("QJsonValue")) { // æ–°å¢ï¼šå¤„ç† QJsonValue ç±»å‹ï¼ˆJSON æ•°ç»„ï¼‰
         QJsonValue tagsVal = tagsVar.value<QJsonValue>();
         if (tagsVal.isArray()) {
             Q_FOREACH(const QJsonValue & jsonVal, tagsVal.toArray()) {
@@ -425,9 +425,9 @@ void StartWindow::onAssetPreview(const QVariantMap& asset)
         items << tagsVar.toString().split(' ', Qt::SkipEmptyParts);
     }
 
-    // ½âÎö categories£¨Í¬ÑùĞŞ¸Ä£¬ĞÂÔö QJsonValue ·ÖÖ§£©
+    // è§£æ categoriesï¼ˆåŒæ ·ä¿®æ”¹ï¼Œæ–°å¢ QJsonValue åˆ†æ”¯ï¼‰
     auto catVar = asset["categories"];
-    if (catVar.typeName() == QString("QJsonValue")) { // ĞÂÔö£º´¦Àí QJsonValue ÀàĞÍ£¨JSON Êı×é£©
+    if (catVar.typeName() == QString("QJsonValue")) { // æ–°å¢ï¼šå¤„ç† QJsonValue ç±»å‹ï¼ˆJSON æ•°ç»„ï¼‰
         QJsonValue catsVal = catVar.value<QJsonValue>();
         if (catsVal.isArray()) {
             Q_FOREACH(const QJsonValue & jsonVal, catsVal.toArray()) {
@@ -444,10 +444,10 @@ void StartWindow::onAssetPreview(const QVariantMap& asset)
         items << catVar.toString().split(' ', Qt::SkipEmptyParts);
     }
 
-    // È¥ÖØ£¨¿ÉÑ¡£¬±ÜÃâ tags ºÍ categories ÖØ¸´£©
+    // å»é‡ï¼ˆå¯é€‰ï¼Œé¿å… tags å’Œ categories é‡å¤ï¼‰
     items.removeDuplicates();
 
-    // ºóĞøÌí¼Óµ½Ä£ĞÍ
+    // åç»­æ·»åŠ åˆ°æ¨¡å‹
     for (const QString& text : items) {
         auto* item = new QStandardItem(text);
         item->setEditable(false);
@@ -458,17 +458,17 @@ void StartWindow::onAssetPreview(const QVariantMap& asset)
 
     QString libPath = get_asset_lib_path();
     QString assetId = asset["asset_id"].toString();
-    if (assetId.isEmpty()) assetId = QStringLiteral("Î´Öª");
+    if (assetId.isEmpty()) assetId = QStringLiteral("æœªçŸ¥");
     m_exrPath = libPath + "/" + assetId + "/" + assetId + "_1k.hdr";
 
     ui->label_2->setText(asset["name"].toString().isEmpty()
-        ? QStringLiteral("Î´Öª×Ê²ú")
+        ? QStringLiteral("æœªçŸ¥èµ„äº§")
         : asset["name"].toString());
     ui->label_4->setText(m_exrPath);
     ui->label_6->setText(QStringLiteral("A CC0 by polyhaven.com"));
 
     ui->label_8->setText(asset["authors"].toString().isEmpty()
-        ? QStringLiteral("Î´Öª×Ê²ú")
+        ? QStringLiteral("æœªçŸ¥èµ„äº§")
         : asset["authors"].toString());
 }
 
@@ -486,11 +486,11 @@ QMap<QString, QJsonObject> StartWindow::filterAssets() const
     while (it != m_assetsData.constEnd()) {
         const QJsonObject& asset = it.value();
 
-        /* 1. ·ÖÀàÆ¥Åä£¨0/1/2/3£©*/
+        /* 1. åˆ†ç±»åŒ¹é…ï¼ˆ0/1/2/3ï¼‰*/
         int assetType = asset.value("type").toInt();
         bool categoryMatch = (m_currentCategory == 3) || (assetType == m_currentCategory);
 
-        /* 2. ¿ÕÌõ¼ş¿ìËÙ·ÖÖ§ */
+        /* 2. ç©ºæ¡ä»¶å¿«é€Ÿåˆ†æ”¯ */
         if (fList.isEmpty() && text.isEmpty()) {
             if (categoryMatch)
                 filtered.insert(it.key(), asset);
@@ -498,23 +498,23 @@ QMap<QString, QJsonObject> StartWindow::filterAssets() const
             continue;
         }
 
-        /* 3. ÎÄ±¾+·ÖÀàÁªºÏ¹ıÂË */
+        /* 3. æ–‡æœ¬+åˆ†ç±»è”åˆè¿‡æ»¤ */
         //QString assetName = asset.name.toLower();
         QString assetName = asset.value("name").toString().toLower();
 
-        /* Í³Ò»°Ñ tags & categories ºÏ²¢µ½ QStringList */
+        /* ç»Ÿä¸€æŠŠ tags & categories åˆå¹¶åˆ° QStringList */
         QStringList assetTags;
-        // 1. ´¦Àí tags Êı×é£º×ªÎª QStringList ²¢Ìí¼Óµ½ assetTags
+        // 1. å¤„ç† tags æ•°ç»„ï¼šè½¬ä¸º QStringList å¹¶æ·»åŠ åˆ° assetTags
         QJsonValue tagsValue = asset.value("tags");
         if (tagsValue.isArray()) {
             QVariantList tagsVariant = tagsValue.toArray().toVariantList();
-            Q_FOREACH(const QVariant & var, tagsVariant) { // ±éÀúÃ¿¸ö QVariant
-                assetTags.append(var.toString()); // ÏÔÊ½×ªÎª QString
+            Q_FOREACH(const QVariant & var, tagsVariant) { // éå†æ¯ä¸ª QVariant
+                assetTags.append(var.toString()); // æ˜¾å¼è½¬ä¸º QString
             }
         }
 
 
-        // 2. ´¦Àí categories Êı×é£º×ªÎª QStringList ²¢Ìí¼Óµ½ assetTags
+        // 2. å¤„ç† categories æ•°ç»„ï¼šè½¬ä¸º QStringList å¹¶æ·»åŠ åˆ° assetTags
         QJsonValue categoriesValue = asset.value("categories");
         if (categoriesValue.isArray()) {
             QVariantList catsVariant = categoriesValue.toArray().toVariantList();
@@ -523,12 +523,12 @@ QMap<QString, QJsonObject> StartWindow::filterAssets() const
             }
         }
 
-        /* ÎÄ±¾Æ¥Åä£ºname »ò ÈÎÒ» tag */
+        /* æ–‡æœ¬åŒ¹é…ï¼šname æˆ– ä»»ä¸€ tag */
         bool textMatch = assetName.contains(text) ||
             std::any_of(assetTags.constBegin(), assetTags.constEnd(),
                 [&](const QString& t) { return t.contains(text); });
 
-        /* f_list È«²¿°üº¬£¨²»Çø·Ö´óĞ¡Ğ´£©*/
+        /* f_list å…¨éƒ¨åŒ…å«ï¼ˆä¸åŒºåˆ†å¤§å°å†™ï¼‰*/
         bool allIn = true;
         for (const QString& item : fList) {
             bool found = std::any_of(assetTags.constBegin(), assetTags.constEnd(),
@@ -561,9 +561,9 @@ void StartWindow::applyFilter()
     ui->m_assetListView->setModel(m_assetModel);
     ui->m_assetListView->setItemDelegate(m_assetDelegate);
 
-    m_statusBar->showMessage(QString(u8"É¸Ñ¡½á¹û£º¹²%1¸ö×Ê²ú").arg(filtered.size()));
+    m_statusBar->showMessage(QString(u8"ç­›é€‰ç»“æœï¼šå…±%1ä¸ªèµ„äº§").arg(filtered.size()));
 
-    // É¸Ñ¡Íê³Éºó£¬¼ÓÔØĞÂµÄ¿É¼ûÇøÓòÍ¼Æ¬
+    // ç­›é€‰å®Œæˆåï¼ŒåŠ è½½æ–°çš„å¯è§åŒºåŸŸå›¾ç‰‡
     QTimer::singleShot(20, this, &StartWindow::loadVisibleAreaThumbs);
 }
 
@@ -700,11 +700,11 @@ void StartWindow::loadTreeModel()
     ui->m_categoriesTreeView->setModel(m_categoriesModel);
     ui->m_categoriesTreeView->setHeaderHidden(true);
 
-    // °ó¶¨·ÖÀàµã»÷ÊÂ¼ş£¨Èç¹ûÖ®Ç°Ã»°ó¶¨£©
+    // ç»‘å®šåˆ†ç±»ç‚¹å‡»äº‹ä»¶ï¼ˆå¦‚æœä¹‹å‰æ²¡ç»‘å®šï¼‰
     connect(ui->m_categoriesTreeView, &QTreeView::clicked, this, &StartWindow::onCategoryClicked);
 }
 
-// ÖØĞ´ closeEvent£¬È·±£¹Ø±ÕÊ±ÖØÖÃÊµÀıÖ¸Õë
+// é‡å†™ closeEventï¼Œç¡®ä¿å…³é—­æ—¶é‡ç½®å®ä¾‹æŒ‡é’ˆ
 void StartWindow::closeEvent(QCloseEvent* event)
 {
     m_polyhavenWorker->cancelDownload();
