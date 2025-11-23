@@ -91,7 +91,6 @@ void StartWindow::destroyInstance()
 
 StartWindow::~StartWindow()
 {
-    m_polyhavenWorker->cancelDownload();
     delete ui;
 }
 
@@ -707,6 +706,7 @@ void StartWindow::loadTreeModel()
 // 重写 closeEvent，确保关闭时重置实例指针
 void StartWindow::closeEvent(QCloseEvent* event)
 {
+    m_polyhavenWorker->cancelDownload();
     s_instance = nullptr;
     QWidget::closeEvent(event);
 }
